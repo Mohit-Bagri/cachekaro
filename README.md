@@ -17,16 +17,17 @@
 
 ## > Overview
 
-**CacheKaro** is a cross-platform CLI tool to analyze and clean cache/storage on **macOS**, **Linux**, and **Windows**. It automatically discovers caches from all installed applications and games.
+**CacheKaro** is a cross-platform CLI tool to analyze and clean cache/storage on **macOS**, **Linux** and **Windows**. It automatically discovers caches from all installed applications and games.
 
 ### Why CacheKaro?
 
 | Feature | Description |
 |---------|-------------|
-| **Auto-Discovery** | Automatically detects 200+ known apps and any new software you install |
-| **Cross-Platform** | One tool for macOS, Linux, and Windows |
-| **Developer Friendly** | Cleans npm, pip, Gradle, Maven, Cargo, Go, Docker, and more |
-| **Game Support** | Steam, Epic Games, Riot Games (Valorant/LoL), Battle.net, and more |
+| **Auto-Discovery** | Automatically detects 300+ known apps and any new software you install |
+| **Cross-Platform** | One tool for macOS, Linux and Windows |
+| **Developer Friendly** | Cleans npm, pip, Gradle, Maven, Cargo, Go, Docker and more |
+| **Game Support** | Steam, Epic Games, Riot Games, Battle.net, Minecraft and more |
+| **Creative Suite** | Adobe CC, DaVinci Resolve, Blender, Ableton, AutoCAD and more |
 | **Safe by Default** | Risk-based classification prevents accidental data loss |
 | **Beautiful Reports** | Cyberpunk-themed HTML reports with charts |
 
@@ -56,6 +57,21 @@ cachekaro report
 
 ---
 
+## > Uninstall
+
+```bash
+pip uninstall cachekaro
+```
+
+To also remove configuration files:
+
+| Platform | Config Path |
+|----------|-------------|
+| macOS/Linux | `rm -rf ~/.config/cachekaro` |
+| Windows | `rmdir /s %APPDATA%\cachekaro` |
+
+---
+
 ## > Quick Start
 
 ```bash
@@ -82,7 +98,7 @@ cachekaro report --output report.html
 | Command | Description |
 |---------|-------------|
 | `cachekaro analyze` | Analyze storage and cache usage |
-| `cachekaro clean` | Clean cache files (interactive, auto, or dry-run) |
+| `cachekaro clean` | Clean cache files (interactive, auto or dry-run) |
 | `cachekaro report` | Generate detailed reports |
 | `cachekaro info` | Show system information |
 
@@ -123,7 +139,7 @@ cachekaro report --output report.html
 
 ### Automatic Discovery
 
-CacheKaro automatically scans standard cache directories and identifies **any** application by its folder name. It recognizes 200+ known apps with friendly names.
+CacheKaro automatically scans standard cache directories and identifies **any** application by its folder name. It recognizes 300+ known apps with friendly names.
 
 ### Categories
 
@@ -132,7 +148,11 @@ CacheKaro automatically scans standard cache directories and identifies **any** 
 | **Browser** | Chrome, Firefox, Safari, Edge, Brave, Arc, Vivaldi |
 | **Development** | npm, pip, Cargo, Gradle, Maven, Docker, VS Code, JetBrains |
 | **Games** | Steam, Epic Games, Riot Games, Battle.net, Minecraft, Unity |
-| **Applications** | Spotify, Discord, Slack, Zoom, WhatsApp, ChatGPT, Claude |
+| **Creative** | Photoshop, Premiere Pro, After Effects, DaVinci Resolve, Final Cut Pro |
+| **3D & Design** | Blender, Cinema 4D, Maya, ZBrush, SketchUp, Figma |
+| **Audio** | Ableton Live, FL Studio, Logic Pro, Pro Tools, Cubase |
+| **Engineering** | AutoCAD, SolidWorks, Fusion 360, MATLAB, Simulink |
+| **Applications** | Spotify, Discord, Slack, Zoom, WhatsApp, Notion |
 | **System** | OS caches, temp files, logs, crash reports |
 
 ### Platform-Specific Paths
