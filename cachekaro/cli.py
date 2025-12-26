@@ -437,9 +437,12 @@ def cmd_report(args: argparse.Namespace) -> int:
     # Generate output path if not specified
     output_path = args.output
     if not output_path:
-        ext = "html" if output_format == "html" else output_format
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = f"cachekaro_report_{timestamp}.{ext}"
+        # Map format to file extension
+        ext_map = {"text": "txt", "html": "html", "json": "json", "csv": "csv"}
+        ext = ext_map.get(output_format, output_format)
+        # Format: cachekaro-report-26-Dec-2025-1830.html
+        timestamp = datetime.now().strftime("%d-%b-%Y-%H%M")
+        output_path = f"cachekaro-report-{timestamp}.{ext}"
 
     # Use no colors for text files
     exporter: Exporter
