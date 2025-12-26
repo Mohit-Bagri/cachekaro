@@ -97,3 +97,4 @@ config.local.yaml
 reports/
 *.html
 !docs/*.html
+report.txt
