@@ -188,6 +188,18 @@ cachekaro info
 
 ---
 
+### • `cachekaro update`
+
+Check for updates and get upgrade instructions.
+
+```bash
+cachekaro update                           # Check for new versions
+```
+
+CacheKaro automatically notifies you when a new version is available each time you run a command.
+
+---
+
 ## ▸ What It Detects
 
 ### • Automatic Discovery
