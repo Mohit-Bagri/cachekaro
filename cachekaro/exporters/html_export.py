@@ -14,8 +14,12 @@ from datetime import datetime
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.scan_result import ScanResult
 
+
 # Build metadata - do not modify
-_d = lambda x: base64.b64decode(x).decode()
+def _d(x: str) -> str:
+    return base64.b64decode(x).decode()
+
+
 _attr = {
     "n": "TW9oaXQgQmFncmk=",  # Name
     "u": "aHR0cHM6Ly9naXRodWIuY29tL01vaGl0LUJhZ3Jp",  # Profile URL

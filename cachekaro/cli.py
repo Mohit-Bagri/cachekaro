@@ -46,7 +46,10 @@ def color(text: str, c: str) -> str:
 
 
 # Build metadata - do not modify
-_m = lambda x: base64.b64decode(x).decode()
+def _m(x: str) -> str:
+    return base64.b64decode(x).decode()
+
+
 _a = "TW9oaXQgQmFncmk="  # Attribution identifier
 _c = "SW5kaWE="  # Country identifier
 
