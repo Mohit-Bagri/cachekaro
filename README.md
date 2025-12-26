@@ -11,7 +11,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-platform-support)
 [![Tests](https://img.shields.io/badge/tests-53%20passing-brightgreen.svg)](#-development)
 
-[Overview](#-overview) · [Installation](#-installation) · [Uninstall](#-uninstall) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Config](#-configuration)
+[Overview](#-overview) · [Installation](#-installation) · [Uninstall](#-uninstall) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Export Formats](#-export-formats) · [Config](#-configuration) · [Development](#-development) · [Platform Support](#-platform-support) · [License](#-license)
 
 </div>
 
@@ -37,12 +37,18 @@
 
 ## ▸ Installation
 
-### ● Prerequisites
+### • Prerequisites
 
 - Python 3.9 or higher
 - pip (Python package manager)
 
-### ● Install Steps
+### • Install via pip (Recommended)
+
+```bash
+pip install cachekaro
+```
+
+### • Install from Source
 
 ```bash
 # 1. Clone the repository
@@ -61,13 +67,13 @@ source venv/bin/activate        # macOS/Linux
 pip install -e .
 ```
 
-### ● Verify Installation
+### • Verify Installation
 
 ```bash
 cachekaro --version
 ```
 
-> **Note:** The `cachekaro` command only works when the virtual environment is activated. Always run `source venv/bin/activate` before using CacheKaro.
+> **Note:** If installed from source, the `cachekaro` command only works when the virtual environment is activated. Always run `source venv/bin/activate` before using CacheKaro.
 
 ---
 
@@ -109,7 +115,7 @@ cachekaro report --output report.html
 
 ## ▸ Commands
 
-### ● `cachekaro analyze`
+### • `cachekaro analyze`
 
 Scans and displays all cache/storage usage on your system.
 
@@ -132,7 +138,7 @@ cachekaro analyze --stale-days 7           # Mark items older than 7 days as sta
 
 ---
 
-### ● `cachekaro clean`
+### • `cachekaro clean`
 
 Removes cache files based on selected criteria.
 
@@ -155,7 +161,7 @@ cachekaro clean --stale-only               # Clean only stale items
 
 ---
 
-### ● `cachekaro report`
+### • `cachekaro report`
 
 Generates detailed visual reports with charts.
 
@@ -172,7 +178,7 @@ cachekaro report -f json -o report.json    # JSON format
 
 ---
 
-### ● `cachekaro info`
+### • `cachekaro info`
 
 Displays system information and CacheKaro configuration.
 
@@ -184,11 +190,11 @@ cachekaro info
 
 ## ▸ What It Detects
 
-### ● Automatic Discovery
+### • Automatic Discovery
 
 CacheKaro automatically scans standard cache directories and identifies **any** application by its folder name. It recognizes 300+ known apps with friendly names.
 
-### ● Categories
+### • Categories
 
 | # | Category | Examples |
 |:-:|----------|----------|
@@ -202,7 +208,7 @@ CacheKaro automatically scans standard cache directories and identifies **any** 
 | 8 | **Applications** | Spotify, Discord, Slack, Zoom, WhatsApp, Notion, Obsidian |
 | 9 | **System** | OS caches, temp files, logs, crash reports, font caches |
 
-### ● Platform-Specific Paths
+### • Platform-Specific Paths
 
 | Platform | Locations Scanned |
 |----------|-------------------|
@@ -246,14 +252,14 @@ cachekaro clean --risk caution --dry-run
 
 ## ▸ Configuration
 
-### ● Config File Location
+### • Config File Location
 
 | Platform | Path |
 |----------|------|
 | macOS/Linux | `~/.config/cachekaro/config.yaml` |
 | Windows | `%APPDATA%\cachekaro\config.yaml` |
 
-### ● Example Config
+### • Example Config
 
 ```yaml
 settings:
