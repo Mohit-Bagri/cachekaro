@@ -102,7 +102,11 @@ class MacOSPlatform(PlatformBase):
 
     def is_admin(self) -> bool:
         """Check if running as root."""
-        return os.geteuid() == 0
+        # os.geteuid() is Unix-only, use getattr for type safety
+        geteuid = getattr(os, "geteuid", None)
+        if geteuid is not None:
+            return bool(geteuid() == 0)
+        return False
 
     def get_cache_paths(self) -> list[CachePath]:
         """Get all macOS cache paths."""

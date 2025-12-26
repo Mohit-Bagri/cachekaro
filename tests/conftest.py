@@ -2,6 +2,7 @@
 Pytest fixtures for CacheKaro tests.
 """
 
+import gc
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -18,6 +19,8 @@ def temp_dir():
     """Create a temporary directory for tests."""
     with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
+        # Force garbage collection to release file handles on Windows
+        gc.collect()
 
 
 @pytest.fixture
