@@ -5,7 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-12-26
+## [2.0.5] - 2025-12-26
+
+### Added
+- Minimalist purple theme for terminal and HTML reports
+- Auto-discovery for 300+ applications and games
+- Glow effects and hover animations in HTML reports
+- Attribution protection with obfuscation
+- "Made in India" branding
+
+### Changed
+- Redesigned HTML reports with clean Inter font
+- Updated ASCII art banner in terminal
+- Improved footer styling (bold CacheKaro, italic Clean It Up!)
+
+### Fixed
+- CI pipeline: ruff linting and mypy type checking
+- GitHub profile links
+
+---
+
+## [2.0.0] - 2025-12-26
+
+### Added
+- Cyberpunk-themed HTML reports with charts
+- Navigation menu in README
+- Serial numbers in tables
+
+### Changed
+- Complete UI overhaul
+- Enhanced cache detection
+
+---
+
+## [1.0.0] - 2025-12-26
 
 ### Added
 
@@ -58,15 +91,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AppData caches
 - Windows Update cache
 - Prefetch files
-
----
-
-## [Unreleased]
-
-### Planned
-- TUI (Terminal User Interface) mode
-- Watch mode for real-time monitoring
-- Cloud cache detection (Dropbox, iCloud, OneDrive)
-- Docker cache analysis
-- ASCII art logo
-- Scheduled scan support

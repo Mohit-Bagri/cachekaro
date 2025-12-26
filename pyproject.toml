@@ -7,12 +7,12 @@ name = "cachekaro"
 version = "2.0.5"
 description = "Cross-platform storage and cache analyzer & cleaner - Cache Karo!"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
-    {name = "MOHIT BAGRI", email = "mohitbagri@example.com"}
+    {name = "MOHIT BAGRI", email = "mailmohitbagri@gmail.com"}
 ]
 maintainers = [
-    {name = "MOHIT BAGRI", email = "mohitbagri@example.com"}
+    {name = "MOHIT BAGRI", email = "mailmohitbagri@gmail.com"}
 ]
 keywords = [
     "cache",
@@ -31,7 +31,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: POSIX :: Linux",
@@ -63,11 +62,11 @@ rich = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mohitbagri/cachekaro"
-Documentation = "https://github.com/mohitbagri/cachekaro#readme"
-Repository = "https://github.com/mohitbagri/cachekaro.git"
-Issues = "https://github.com/mohitbagri/cachekaro/issues"
-Changelog = "https://github.com/mohitbagri/cachekaro/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/Mohit-Bagri/cachekaro"
+Documentation = "https://github.com/Mohit-Bagri/cachekaro#readme"
+Repository = "https://github.com/Mohit-Bagri/cachekaro.git"
+Issues = "https://github.com/Mohit-Bagri/cachekaro/issues"
+Changelog = "https://github.com/Mohit-Bagri/cachekaro/blob/main/CHANGELOG.md"
 
 [project.scripts]
 cachekaro = "cachekaro.cli:main"
