@@ -11,6 +11,8 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-platform-support)
 [![Tests](https://img.shields.io/badge/tests-53%20passing-brightgreen.svg)](#-development)
 
+[Overview](#-overview) · [Installation](#-installation) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Config](#-configuration)
+
 </div>
 
 ---
@@ -21,15 +23,15 @@
 
 ### Why CacheKaro?
 
-| | Feature | Description |
-|---|---------|-------------|
-| ◈ | **Auto-Discovery** | Automatically detects 300+ known apps and any new software you install |
-| ◈ | **Cross-Platform** | One tool for macOS, Linux and Windows |
-| ◈ | **Developer Friendly** | Cleans npm, pip, Gradle, Maven, Cargo, Go, Docker and more |
-| ◈ | **Game Support** | Steam, Epic Games, Riot Games, Battle.net, Minecraft and more |
-| ◈ | **Creative Suite** | Adobe CC, DaVinci Resolve, Blender, Ableton, AutoCAD and more |
-| ◈ | **Safe by Default** | Risk-based classification prevents accidental data loss |
-| ◈ | **Beautiful Reports** | Cyberpunk-themed HTML reports with charts |
+| # | Feature | Description |
+|:-:|---------|-------------|
+| 1 | **Auto-Discovery** | Automatically detects 300+ known apps and any new software you install |
+| 2 | **Cross-Platform** | One tool for macOS, Linux and Windows |
+| 3 | **Developer Friendly** | Cleans npm, pip, Gradle, Maven, Cargo, Go, Docker and more |
+| 4 | **Game Support** | Steam, Epic Games, Riot Games, Battle.net, Minecraft and more |
+| 5 | **Creative Suite** | Adobe CC, DaVinci Resolve, Blender, Ableton, AutoCAD and more |
+| 6 | **Safe by Default** | Risk-based classification prevents accidental data loss |
+| 7 | **Beautiful Reports** | Cyberpunk-themed HTML reports with charts |
 
 ---
 
@@ -188,17 +190,17 @@ CacheKaro automatically scans standard cache directories and identifies **any** 
 
 ### ● Categories
 
-| | Category | Examples |
-|---|----------|----------|
-| ◉ | **Browser** | Chrome, Firefox, Safari, Edge, Brave, Arc, Vivaldi, Opera |
-| ◉ | **Development** | npm, pip, Cargo, Gradle, Maven, Docker, VS Code, JetBrains, Xcode |
-| ◉ | **Games** | Steam, Epic Games, Riot Games, Battle.net, Minecraft, Unity, GOG |
-| ◉ | **Creative** | Photoshop, Premiere Pro, After Effects, DaVinci Resolve, Final Cut Pro |
-| ◉ | **3D & Design** | Blender, Cinema 4D, Maya, ZBrush, SketchUp, Figma, Sketch |
-| ◉ | **Audio** | Ableton Live, FL Studio, Logic Pro, Pro Tools, Cubase, GarageBand |
-| ◉ | **Engineering** | AutoCAD, SolidWorks, Fusion 360, MATLAB, Simulink, Revit |
-| ◉ | **Applications** | Spotify, Discord, Slack, Zoom, WhatsApp, Notion, Obsidian |
-| ◉ | **System** | OS caches, temp files, logs, crash reports, font caches |
+| # | Category | Examples |
+|:-:|----------|----------|
+| 1 | **Browser** | Chrome, Firefox, Safari, Edge, Brave, Arc, Vivaldi, Opera |
+| 2 | **Development** | npm, pip, Cargo, Gradle, Maven, Docker, VS Code, JetBrains, Xcode |
+| 3 | **Games** | Steam, Epic Games, Riot Games, Battle.net, Minecraft, Unity, GOG |
+| 4 | **Creative** | Photoshop, Premiere Pro, After Effects, DaVinci Resolve, Final Cut Pro |
+| 5 | **3D & Design** | Blender, Cinema 4D, Maya, ZBrush, SketchUp, Figma, Sketch |
+| 6 | **Audio** | Ableton Live, FL Studio, Logic Pro, Pro Tools, Cubase, GarageBand |
+| 7 | **Engineering** | AutoCAD, SolidWorks, Fusion 360, MATLAB, Simulink, Revit |
+| 8 | **Applications** | Spotify, Discord, Slack, Zoom, WhatsApp, Notion, Obsidian |
+| 9 | **System** | OS caches, temp files, logs, crash reports, font caches |
 
 ### ● Platform-Specific Paths
 
@@ -233,12 +235,12 @@ cachekaro clean --risk caution --dry-run
 
 ## ▸ Export Formats
 
-| Format | Icon | Use Case | Command Example |
-|--------|------|----------|-----------------|
-| **Text** | ▤ | Terminal output with colors | `cachekaro analyze` |
-| **JSON** | ◇ | APIs and automation | `cachekaro analyze -f json` |
-| **CSV** | ▦ | Spreadsheet analysis | `cachekaro analyze -f csv -o data.csv` |
-| **HTML** | ◈ | Interactive reports with charts | `cachekaro report` |
+| # | Format | Use Case | Command Example |
+|:-:|--------|----------|-----------------|
+| 1 | **Text** | Terminal output with colors | `cachekaro analyze` |
+| 2 | **JSON** | APIs and automation | `cachekaro analyze -f json` |
+| 3 | **CSV** | Spreadsheet analysis | `cachekaro analyze -f csv -o data.csv` |
+| 4 | **HTML** | Interactive reports with charts | `cachekaro report` |
 
 ---
 
@@ -307,7 +309,7 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-Made with ♥ by [Mohit Bagri](https://github.com/mohitbagri)
+Made with ❤️ by [Mohit Bagri](https://github.com/mohitbagri)
 
 *Cache Karo!* — Clean it up!
 
