@@ -7,13 +7,14 @@ Provides efficient scanning with metadata collection.
 import os
 import stat
 from collections import defaultdict
+from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from typing import Callable, Optional
 
 from cachekaro.models.cache_item import CacheItem, FileInfo, FileTypeStats
-from cachekaro.platforms.base import CachePath, Category, RiskLevel
+from cachekaro.platforms.base import CachePath
 
 
 class Scanner:
@@ -207,7 +208,7 @@ class Scanner:
         largest_files.sort(key=lambda x: x.size_bytes, reverse=True)
         item.largest_files = largest_files[: self.max_largest_files]
 
-    def _walk_directory(self, path: Path):
+    def _walk_directory(self, path: Path) -> Iterator[os.DirEntry[str]]:
         """
         Walk directory tree yielding DirEntry objects.
 

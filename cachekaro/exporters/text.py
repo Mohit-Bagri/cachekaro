@@ -4,8 +4,6 @@ Plain text exporter for CacheKaro.
 Produces formatted text output suitable for terminal display.
 """
 
-from datetime import datetime
-from typing import Optional
 
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.scan_result import ScanResult

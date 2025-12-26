@@ -4,10 +4,8 @@ Cache cleaner for CacheKaro.
 Provides safe cleaning with multiple modes and backup capabilities.
 """
 
-import os
 import shutil
 import tempfile
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -183,9 +181,10 @@ class Cleaner:
                 )
 
         summary.end_time = datetime.now()
-        summary.duration_seconds = (
-            summary.end_time - summary.start_time
-        ).total_seconds()
+        if summary.start_time is not None:
+            summary.duration_seconds = (
+                summary.end_time - summary.start_time
+            ).total_seconds()
 
         return summary
 

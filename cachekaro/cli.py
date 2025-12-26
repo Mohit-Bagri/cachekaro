@@ -7,15 +7,12 @@ Provides analyze, clean, and report commands with various options.
 import argparse
 import sys
 from datetime import datetime
-from pathlib import Path
-from typing import Optional
 
 from cachekaro import __version__
 from cachekaro.core.analyzer import Analyzer
 from cachekaro.core.cleaner import Cleaner, CleanMode
-from cachekaro.exporters import get_exporter, TextExporter
+from cachekaro.exporters import Exporter, TextExporter, get_exporter
 from cachekaro.models.cache_item import CacheItem
-from cachekaro.models.scan_result import ScanResult
 from cachekaro.platforms import get_platform, get_platform_name
 from cachekaro.platforms.base import Category, RiskLevel
 
@@ -181,6 +178,7 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     result = analyzer.analyze(categories=categories, max_risk=max_risk)
 
     # Export result
+    exporter: Exporter
     if args.format == "text":
         exporter = TextExporter(use_colors=not args.no_color)
         output = exporter.export(result)
@@ -578,7 +576,8 @@ def main() -> int:
 
     # Run the command
     try:
-        return args.func(args)
+        result: int = args.func(args)
+        return result
     except KeyboardInterrupt:
         print(f"\n{color('Interrupted.', Colors.YELLOW)}")
         return 130

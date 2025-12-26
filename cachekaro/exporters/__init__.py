@@ -5,10 +5,10 @@ Supports text, JSON, CSV, and HTML output formats.
 """
 
 from cachekaro.exporters.base import Exporter, ExportFormat
-from cachekaro.exporters.text import TextExporter
-from cachekaro.exporters.json_export import JsonExporter
 from cachekaro.exporters.csv_export import CsvExporter
 from cachekaro.exporters.html_export import HtmlExporter
+from cachekaro.exporters.json_export import JsonExporter
+from cachekaro.exporters.text import TextExporter
 
 __all__ = [
     "Exporter",
@@ -33,7 +33,7 @@ def get_exporter(format: str) -> Exporter:
     Raises:
         ValueError: If format is not supported
     """
-    exporters = {
+    exporters: dict[str, type[Exporter]] = {
         "text": TextExporter,
         "json": JsonExporter,
         "csv": CsvExporter,
@@ -47,4 +47,5 @@ def get_exporter(format: str) -> Exporter:
             f"Supported formats: {', '.join(exporters.keys())}"
         )
 
-    return exporters[format_lower]()
+    exporter_class = exporters[format_lower]
+    return exporter_class()

@@ -39,7 +39,7 @@ class LinuxPlatform(PlatformBase):
 
         # Try to get distribution info
         try:
-            with open("/etc/os-release", "r") as f:
+            with open("/etc/os-release") as f:
                 lines = f.readlines()
                 distro = "Linux"
                 version = ""

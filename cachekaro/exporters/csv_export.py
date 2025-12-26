@@ -6,7 +6,6 @@ Produces CSV output for spreadsheet analysis.
 
 import csv
 import io
-from typing import List
 
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.cache_item import CacheItem

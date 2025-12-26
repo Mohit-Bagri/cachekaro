@@ -3,9 +3,8 @@ Cross-platform terminal color utilities for CacheKaro.
 """
 
 import os
-import sys
 import re
-from typing import Optional
+import sys
 
 
 class Colors:

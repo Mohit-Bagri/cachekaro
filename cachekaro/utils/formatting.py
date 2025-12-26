@@ -2,7 +2,7 @@
 Formatting utilities for CacheKaro.
 """
 
-from typing import Union
+from typing import Optional, Union
 
 
 def format_size(size_bytes: Union[int, float], precision: int = 2) -> str:
@@ -125,7 +125,7 @@ def create_progress_bar(
         Progress bar string
     """
     if total == 0:
-        percent = 0
+        percent = 0.0
     else:
         percent = current / total
 
@@ -137,7 +137,7 @@ def create_progress_bar(
 def create_table(
     headers: list[str],
     rows: list[list[str]],
-    min_widths: list[int] | None = None,
+    min_widths: Optional[list[int]] = None,
 ) -> str:
     """
     Create a formatted text table.

@@ -4,7 +4,6 @@ Data models for scan results and summaries.
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
 from typing import Optional
 
 from cachekaro.models.cache_item import CacheItem

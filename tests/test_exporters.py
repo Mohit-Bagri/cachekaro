@@ -3,9 +3,10 @@ Tests for exporters.
 """
 
 import json
+
 import pytest
 
-from cachekaro.exporters import get_exporter, TextExporter, JsonExporter, CsvExporter, HtmlExporter
+from cachekaro.exporters import CsvExporter, HtmlExporter, JsonExporter, TextExporter, get_exporter
 
 
 class TestTextExporter:

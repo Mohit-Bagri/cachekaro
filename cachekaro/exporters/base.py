@@ -5,7 +5,7 @@ Base exporter class for CacheKaro.
 from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 from cachekaro.models.scan_result import ScanResult
 

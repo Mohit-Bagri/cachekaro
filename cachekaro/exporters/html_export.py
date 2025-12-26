@@ -4,14 +4,12 @@ HTML exporter for CacheKaro.
 Produces interactive HTML reports with charts and tables.
 """
 
-from datetime import datetime
 import html
 import json
-from typing import Any
+from datetime import datetime
 
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.scan_result import ScanResult
-from cachekaro.platforms.base import Category
 
 
 class HtmlExporter(Exporter):

@@ -3,14 +3,13 @@ Tests for platform detection and implementations.
 """
 
 import platform
-import pytest
 
+from cachekaro.platforms.base import Category, RiskLevel
 from cachekaro.platforms.detector import (
-    get_platform_name,
     get_platform,
+    get_platform_name,
     get_system_info,
 )
-from cachekaro.platforms.base import Category, RiskLevel
 
 
 class TestPlatformDetection:

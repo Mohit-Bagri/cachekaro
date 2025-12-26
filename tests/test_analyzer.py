@@ -2,11 +2,9 @@
 Tests for the analyzer and scanner.
 """
 
-import pytest
-from pathlib import Path
 
-from cachekaro.core.scanner import Scanner
 from cachekaro.core.analyzer import Analyzer
+from cachekaro.core.scanner import Scanner
 from cachekaro.platforms import get_platform
 from cachekaro.platforms.base import Category, RiskLevel
 

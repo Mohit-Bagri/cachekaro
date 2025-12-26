@@ -3,7 +3,7 @@ Default configuration and config file handling for CacheKaro.
 """
 
 import os
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -111,7 +111,7 @@ def load_config(config_path: Optional[Path] = None) -> Config:
         return Config()
 
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
             if data is None:
                 return Config()

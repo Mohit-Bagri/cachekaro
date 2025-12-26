@@ -10,7 +10,7 @@ from typing import Callable, Optional
 
 from cachekaro.core.scanner import Scanner
 from cachekaro.models.cache_item import CacheItem
-from cachekaro.models.scan_result import ScanResult, ScanMetadata
+from cachekaro.models.scan_result import ScanMetadata, ScanResult
 from cachekaro.platforms.base import Category, PlatformBase, RiskLevel
 
 
@@ -325,7 +325,7 @@ class Analyzer:
             })
 
         # Sort by priority
-        priority_order = {"high": 0, "medium": 1, "low": 2}
-        recommendations.sort(key=lambda x: priority_order.get(x["priority"], 2))
+        priority_order: dict[str, int] = {"high": 0, "medium": 1, "low": 2}
+        recommendations.sort(key=lambda x: priority_order.get(str(x["priority"]), 2))
 
         return recommendations

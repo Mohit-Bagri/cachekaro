@@ -2,12 +2,10 @@
 Tests for the cleaner.
 """
 
-import pytest
 from pathlib import Path
 
 from cachekaro.core.cleaner import Cleaner, CleanMode, CleanResult, CleanSummary
 from cachekaro.core.scanner import Scanner
-from cachekaro.models.cache_item import CacheItem
 from cachekaro.platforms.base import Category, RiskLevel
 
 
@@ -37,7 +35,6 @@ class TestCleaner:
         """Test auto mode deletes files."""
         scanner = Scanner()
         item = scanner.scan_path(sample_cache_path)
-        original_size = item.size_bytes
 
         cleaner = Cleaner(mode=CleanMode.AUTO, max_risk=RiskLevel.SAFE)
         summary = cleaner.clean([item])

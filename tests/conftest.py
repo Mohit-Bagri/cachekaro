@@ -3,14 +3,14 @@ Pytest fixtures for CacheKaro tests.
 """
 
 import tempfile
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import pytest
 
+from cachekaro.models.cache_item import CacheItem
+from cachekaro.models.scan_result import ScanMetadata, ScanResult
 from cachekaro.platforms.base import CachePath, Category, RiskLevel
-from cachekaro.models.cache_item import CacheItem, FileInfo
-from cachekaro.models.scan_result import ScanResult, ScanMetadata
 
 
 @pytest.fixture

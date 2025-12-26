@@ -110,7 +110,7 @@ class WindowsPlatform(PlatformBase):
         Uses ipconfig /flushdns command.
         """
         try:
-            result = subprocess.run(
+            subprocess.run(
                 ["ipconfig", "/flushdns"],
                 capture_output=True,
                 text=True,
@@ -125,7 +125,7 @@ class WindowsPlatform(PlatformBase):
     def is_admin(self) -> bool:
         """Check if running as Administrator."""
         try:
-            return ctypes.windll.shell32.IsUserAnAdmin() != 0
+            return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined]
         except (AttributeError, OSError):
             return False
 
@@ -136,7 +136,7 @@ class WindowsPlatform(PlatformBase):
         Uses PowerShell to clear the recycle bin.
         """
         try:
-            result = subprocess.run(
+            subprocess.run(
                 [
                     "powershell",
                     "-Command",

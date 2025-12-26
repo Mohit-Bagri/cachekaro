@@ -92,7 +92,7 @@ def is_wsl() -> bool:
         return False
 
     try:
-        with open("/proc/version", "r") as f:
+        with open("/proc/version") as f:
             version = f.read().lower()
             return "microsoft" in version or "wsl" in version
     except (FileNotFoundError, PermissionError):
@@ -107,7 +107,7 @@ def is_docker() -> bool:
         True if running in Docker, False otherwise.
     """
     try:
-        with open("/proc/1/cgroup", "r") as f:
+        with open("/proc/1/cgroup") as f:
             return "docker" in f.read()
     except (FileNotFoundError, PermissionError):
         pass
