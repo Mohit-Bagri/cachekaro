@@ -1,8 +1,0 @@
-Path,Name,Category,Size (Bytes),Size (Formatted),File Count,Age (Days),Is Stale,Risk Level,App Name,Description
-/Users/mohitbagri/Downloads,Downloads,downloads,831768999,793.24 MB,62,0,False,caution,,Downloaded files (review before deleting!)
-/Users/mohitbagri/.npm/_cacache,NPM Cache,development,330450470,315.14 MB,2893,0,False,safe,,NPM package manager cache
-/Users/mohitbagri/Library/Caches/Google,Google/Chrome Cache,browser,623595,608.98 KB,8,0,False,safe,Chrome,Google Chrome browser cache
-/Users/mohitbagri/.cache/huggingface,HuggingFace Models,development,6148,6.00 KB,1,37,True,moderate,,HuggingFace AI models cache (can be large!)
-/Users/mohitbagri/Library/Caches/GeoServices,GeoServices,system_cache,422,422 B,1,0,False,safe,,Apple location services cache
-/Users/mohitbagri/Library/Caches/com.apple.Safari,Safari Cache,browser,0,0 B,0,0,False,safe,Safari,Safari browser cache
-/Users/mohitbagri/.Trash,Trash,trash,0,0 B,0,0,False,safe,,Files in Trash (permanently delete)
