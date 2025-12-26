@@ -23,6 +23,7 @@ from cachekaro.platforms.base import (
     PlatformBase,
     PlatformInfo,
     RiskLevel,
+    identify_app_from_path,
 )
 
 
@@ -169,7 +170,12 @@ class LinuxPlatform(PlatformBase):
         return False
 
     def get_cache_paths(self) -> list[CachePath]:
-        """Get all Linux cache paths."""
+        """
+        Get all Linux cache paths using automatic discovery.
+
+        This method automatically discovers all application caches in standard
+        Linux cache locations following XDG Base Directory Specification.
+        """
         if self._cache_paths:
             return self._cache_paths
 
@@ -177,421 +183,292 @@ class LinuxPlatform(PlatformBase):
         cache_home = self._get_xdg_cache_home()
         config_home = self._get_xdg_config_home()
         data_home = self._get_xdg_data_home()
-
-        paths = []
-
-        # ============================================================
-        # XDG CACHE (~/.cache) - Safe
-        # ============================================================
-
-        # Browser caches
-        paths.extend([
-            CachePath(
-                path=cache_home / "google-chrome",
-                name="Google Chrome Cache",
-                category=Category.BROWSER,
-                description="Google Chrome browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Chrome",
-            ),
-            CachePath(
-                path=cache_home / "chromium",
-                name="Chromium Cache",
-                category=Category.BROWSER,
-                description="Chromium browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Chromium",
-            ),
-            CachePath(
-                path=cache_home / "mozilla",
-                name="Firefox Cache",
-                category=Category.BROWSER,
-                description="Mozilla Firefox browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Firefox",
-            ),
-            CachePath(
-                path=cache_home / "BraveSoftware",
-                name="Brave Browser Cache",
-                category=Category.BROWSER,
-                description="Brave browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Brave",
-            ),
-            CachePath(
-                path=cache_home / "microsoft-edge",
-                name="Microsoft Edge Cache",
-                category=Category.BROWSER,
-                description="Microsoft Edge browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Edge",
-            ),
-        ])
-
-        # Development tool caches
-        paths.extend([
-            CachePath(
-                path=cache_home / "pip",
-                name="pip Cache",
-                category=Category.DEVELOPMENT,
-                description="Python pip package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "yarn",
-                name="Yarn Cache",
-                category=Category.DEVELOPMENT,
-                description="Yarn package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "pnpm",
-                name="pnpm Cache",
-                category=Category.DEVELOPMENT,
-                description="pnpm package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "node-gyp",
-                name="node-gyp Cache",
-                category=Category.DEVELOPMENT,
-                description="Node.js native addon build cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "typescript",
-                name="TypeScript Cache",
-                category=Category.DEVELOPMENT,
-                description="TypeScript compiler cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "JetBrains",
-                name="JetBrains Cache",
-                category=Category.DEVELOPMENT,
-                description="JetBrains IDE cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="JetBrains",
-            ),
-            CachePath(
-                path=cache_home / "huggingface",
-                name="HuggingFace Models",
-                category=Category.DEVELOPMENT,
-                description="HuggingFace AI models cache (can be large!)",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=cache_home / "puppeteer",
-                name="Puppeteer Browsers",
-                category=Category.DEVELOPMENT,
-                description="Puppeteer browser automation cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "pre-commit",
-                name="pre-commit Cache",
-                category=Category.DEVELOPMENT,
-                description="pre-commit hooks cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "uv",
-                name="uv Cache",
-                category=Category.DEVELOPMENT,
-                description="uv Python package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "go-build",
-                name="Go Build Cache",
-                category=Category.DEVELOPMENT,
-                description="Go compilation cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "bazel",
-                name="Bazel Cache",
-                category=Category.DEVELOPMENT,
-                description="Bazel build system cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
-
-        # Application caches
-        paths.extend([
-            CachePath(
-                path=cache_home / "spotify",
-                name="Spotify Cache",
-                category=Category.APPLICATION,
-                description="Spotify streaming cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Spotify",
-            ),
-            CachePath(
-                path=cache_home / "discord",
-                name="Discord Cache",
-                category=Category.APPLICATION,
-                description="Discord app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Discord",
-            ),
-            CachePath(
-                path=cache_home / "Slack",
-                name="Slack Cache",
-                category=Category.APPLICATION,
-                description="Slack messaging app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Slack",
-            ),
-            CachePath(
-                path=cache_home / "zoom",
-                name="Zoom Cache",
-                category=Category.APPLICATION,
-                description="Zoom video conferencing cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Zoom",
-            ),
-            CachePath(
-                path=cache_home / "thumbnails",
-                name="Thumbnails",
-                category=Category.SYSTEM_CACHE,
-                description="File manager thumbnail cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "fontconfig",
-                name="Font Cache",
-                category=Category.SYSTEM_CACHE,
-                description="Font configuration cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=cache_home / "mesa_shader_cache",
-                name="Mesa Shader Cache",
-                category=Category.SYSTEM_CACHE,
-                description="OpenGL shader compilation cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        paths: list[CachePath] = []
 
         # ============================================================
-        # NPM CACHE (~/.npm)
+        # AUTO-DISCOVER: ~/.cache (XDG Cache Home)
         # ============================================================
-        paths.append(
-            CachePath(
-                path=home / ".npm" / "_cacache",
-                name="NPM Cache",
-                category=Category.DEVELOPMENT,
-                description="NPM package manager cache",
-                risk_level=RiskLevel.SAFE,
-            )
-        )
+        if cache_home.exists():
+            # Exclude system caches we handle separately
+            exclude = ["cachekaro", "TemporaryItems"]
+            discovered = self.discover_caches_in_directory(cache_home, exclude_patterns=exclude)
+            paths.extend(discovered)
 
         # ============================================================
-        # CONFIG-BASED APP DATA (~/.config)
+        # SPECIFIC: VS Code and variants in ~/.config
         # ============================================================
+        vscode_apps = [
+            ("Code", "VS Code"),
+            ("Cursor", "Cursor"),
+            ("VSCodium", "VSCodium"),
+            ("Code - OSS", "Code OSS"),
+        ]
+        for folder, name in vscode_apps:
+            base = config_home / folder
+            if base.exists():
+                for cache_folder in ["Cache", "CachedData", "CachedExtensionVSIXs", "CachedProfilesData"]:
+                    cache_path = base / cache_folder
+                    if cache_path.exists():
+                        paths.append(CachePath(
+                            path=cache_path,
+                            name=f"{name} {cache_folder}",
+                            category=Category.DEVELOPMENT,
+                            description=f"{name} {cache_folder}",
+                            risk_level=RiskLevel.SAFE,
+                            app_specific=True,
+                            app_name=name,
+                        ))
 
-        # VS Code
-        paths.extend([
-            CachePath(
-                path=config_home / "Code" / "Cache",
-                name="VS Code Cache",
-                category=Category.DEVELOPMENT,
-                description="Visual Studio Code cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-            CachePath(
-                path=config_home / "Code" / "CachedData",
-                name="VS Code CachedData",
-                category=Category.DEVELOPMENT,
-                description="VS Code cached compiled data",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-            CachePath(
-                path=config_home / "Code" / "CachedExtensionVSIXs",
-                name="VS Code Extension Cache",
-                category=Category.DEVELOPMENT,
-                description="VS Code old extension downloads",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-        ])
-
-        # Chrome/Chromium user data (Service Workers)
-        paths.extend([
-            CachePath(
-                path=config_home / "google-chrome" / "Default" / "Service Worker",
-                name="Chrome Service Workers",
-                category=Category.BROWSER,
-                description="Chrome web app service workers",
-                risk_level=RiskLevel.SAFE,
-                clean_contents_only=False,
-                app_specific=True,
-                app_name="Chrome",
-            ),
-            CachePath(
-                path=config_home / "chromium" / "Default" / "Service Worker",
-                name="Chromium Service Workers",
-                category=Category.BROWSER,
-                description="Chromium web app service workers",
-                risk_level=RiskLevel.SAFE,
-                clean_contents_only=False,
-                app_specific=True,
-                app_name="Chromium",
-            ),
-        ])
+        # Browser Service Workers in ~/.config
+        browsers = [
+            ("google-chrome", "Chrome"),
+            ("chromium", "Chromium"),
+            ("BraveSoftware/Brave-Browser", "Brave"),
+            ("microsoft-edge", "Edge"),
+        ]
+        for folder, name in browsers:
+            sw_path = config_home / folder / "Default" / "Service Worker"
+            if sw_path.exists():
+                paths.append(CachePath(
+                    path=sw_path,
+                    name=f"{name} Service Workers",
+                    category=Category.BROWSER,
+                    description=f"{name} web app service workers",
+                    risk_level=RiskLevel.SAFE,
+                    app_specific=True,
+                    app_name=name,
+                ))
 
         # ============================================================
-        # DEVELOPMENT CACHES (Home directory)
+        # SPECIFIC: Development tool caches (fixed locations)
         # ============================================================
-        paths.extend([
-            CachePath(
-                path=home / ".gradle" / "caches",
-                name="Gradle Cache",
-                category=Category.DEVELOPMENT,
-                description="Gradle build system cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".m2" / "repository",
-                name="Maven Repository",
-                category=Category.DEVELOPMENT,
-                description="Maven dependency cache",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=home / ".cargo" / "registry" / "cache",
-                name="Cargo Registry Cache",
-                category=Category.DEVELOPMENT,
-                description="Rust Cargo package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / "go" / "pkg" / "mod" / "cache",
-                name="Go Module Cache",
-                category=Category.DEVELOPMENT,
-                description="Go module download cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".docker" / "buildx",
-                name="Docker Buildx Cache",
-                category=Category.DEVELOPMENT,
-                description="Docker buildx builder cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".composer" / "cache",
-                name="Composer Cache",
-                category=Category.DEVELOPMENT,
-                description="PHP Composer package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".gem" / "cache",
-                name="Ruby Gem Cache",
-                category=Category.DEVELOPMENT,
-                description="Ruby gem package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        dev_caches = [
+            (home / ".npm" / "_cacache", "npm Cache", "npm package manager cache"),
+            (home / ".gradle" / "caches", "Gradle Cache", "Gradle build system cache"),
+            (home / ".m2" / "repository", "Maven Repository", "Maven dependency cache"),
+            (home / ".cargo" / "registry" / "cache", "Cargo Cache", "Rust Cargo package cache"),
+            (home / "go" / "pkg" / "mod" / "cache", "Go Module Cache", "Go module download cache"),
+            (home / ".docker" / "buildx", "Docker Buildx Cache", "Docker buildx builder cache"),
+            (home / ".composer" / "cache", "Composer Cache", "PHP Composer package cache"),
+            (home / ".gem", "RubyGems Cache", "Ruby gems cache"),
+            (home / ".bundle" / "cache", "Bundler Cache", "Ruby Bundler cache"),
+            (home / ".pub-cache", "Dart/Flutter Cache", "Dart and Flutter package cache"),
+            (home / ".nuget" / "packages", "NuGet Cache", ".NET NuGet package cache"),
+            (home / ".android" / "cache", "Android SDK Cache", "Android SDK cache"),
+        ]
+
+        for path, name, description in dev_caches:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.DEVELOPMENT,
+                    description=description,
+                    risk_level=RiskLevel.SAFE,
+                ))
 
         # ============================================================
-        # LOGS
+        # AUTO-DISCOVER: ~/.local/share (XDG Data Home) logs
         # ============================================================
-        paths.extend([
-            CachePath(
-                path=data_home / "JetBrains",
-                name="JetBrains Data",
-                category=Category.LOGS,
-                description="JetBrains IDE logs and data",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=home / ".xsession-errors",
+        if data_home.exists():
+            for item in data_home.iterdir():
+                if item.is_dir() and item.name.lower() in ["jetbrains", "logs"]:
+                    try:
+                        if any(item.iterdir()):
+                            app_name, _ = identify_app_from_path(item.name)
+                            paths.append(CachePath(
+                                path=item,
+                                name=f"{app_name} Data",
+                                category=Category.LOGS,
+                                description=f"Application data for {app_name}",
+                                risk_level=RiskLevel.MODERATE,
+                                app_specific=True,
+                                app_name=app_name,
+                            ))
+                    except PermissionError:
+                        continue
+
+        # X Session errors log
+        xsession_errors = home / ".xsession-errors"
+        if xsession_errors.exists():
+            paths.append(CachePath(
+                path=xsession_errors,
                 name="X Session Errors",
                 category=Category.LOGS,
                 description="X Window session error log",
                 risk_level=RiskLevel.SAFE,
                 clean_contents_only=False,
-            ),
-        ])
+            ))
+
+        # ============================================================
+        # GAME CACHES
+        # ============================================================
+        paths.extend(self.get_game_cache_paths())
 
         # ============================================================
         # TRASH
         # ============================================================
         trash_path = self.get_trash_path()
         if trash_path:
-            paths.extend([
-                CachePath(
-                    path=trash_path / "files",
-                    name="Trash Files",
-                    category=Category.TRASH,
-                    description="Files in Trash (permanently delete)",
-                    risk_level=RiskLevel.SAFE,
-                ),
-                CachePath(
-                    path=trash_path / "info",
-                    name="Trash Info",
-                    category=Category.TRASH,
-                    description="Trash metadata",
-                    risk_level=RiskLevel.SAFE,
-                ),
-            ])
+            for subfolder in ["files", "info"]:
+                trash_sub = trash_path / subfolder
+                if trash_sub.exists():
+                    paths.append(CachePath(
+                        path=trash_sub,
+                        name=f"Trash {subfolder.capitalize()}",
+                        category=Category.TRASH,
+                        description=f"Trash {subfolder}",
+                        risk_level=RiskLevel.SAFE,
+                    ))
 
         # ============================================================
         # DOWNLOADS
         # ============================================================
-        # Check XDG user dirs
         downloads_path = home / "Downloads"
         xdg_downloads = os.environ.get("XDG_DOWNLOAD_DIR")
         if xdg_downloads:
             downloads_path = Path(xdg_downloads)
 
-        paths.append(
-            CachePath(
+        if downloads_path.exists():
+            paths.append(CachePath(
                 path=downloads_path,
                 name="Downloads",
                 category=Category.DOWNLOADS,
                 description="Downloaded files (review before deleting!)",
                 risk_level=RiskLevel.CAUTION,
-            )
-        )
+            ))
 
         # ============================================================
         # SNAP & FLATPAK CACHES
         # ============================================================
-        paths.extend([
-            CachePath(
-                path=home / "snap",
+        snap_path = home / "snap"
+        if snap_path.exists():
+            paths.append(CachePath(
+                path=snap_path,
                 name="Snap Packages",
                 category=Category.CONTAINER,
                 description="Snap package data (use with caution)",
                 risk_level=RiskLevel.CAUTION,
-            ),
-            CachePath(
-                path=data_home / "flatpak",
+            ))
+
+        flatpak_path = data_home / "flatpak"
+        if flatpak_path.exists():
+            paths.append(CachePath(
+                path=flatpak_path,
                 name="Flatpak Data",
                 category=Category.CONTAINER,
                 description="Flatpak application data",
                 risk_level=RiskLevel.CAUTION,
-            ),
-        ])
+            ))
 
         self._cache_paths = paths
         return self._cache_paths
+
+    def get_game_cache_paths(self) -> list[CachePath]:
+        """Get Linux game-specific cache paths."""
+        home = self.get_home_dir()
+        data_home = self._get_xdg_data_home()
+        paths: list[CachePath] = []
+
+        # Steam
+        steam_paths = [
+            (home / ".steam" / "steam" / "appcache", "Steam App Cache", "Steam application cache"),
+            (home / ".steam" / "steam" / "depotcache", "Steam Depot Cache", "Steam game depot cache"),
+            (home / ".steam" / "steam" / "htmlcache", "Steam HTML Cache", "Steam browser cache"),
+            (data_home / "Steam" / "appcache", "Steam App Cache", "Steam application cache"),
+        ]
+        for path, name, desc in steam_paths:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.GAME,
+                    description=desc,
+                    risk_level=RiskLevel.SAFE,
+                    app_specific=True,
+                    app_name="Steam",
+                ))
+
+        # Proton/Wine prefixes cache
+        proton_cache = home / ".steam" / "steam" / "steamapps" / "shadercache"
+        if proton_cache.exists():
+            paths.append(CachePath(
+                path=proton_cache,
+                name="Steam Shader Cache",
+                category=Category.GAME,
+                description="Steam/Proton shader compilation cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Steam",
+            ))
+
+        # Lutris
+        lutris_cache = home / ".cache" / "lutris"
+        if lutris_cache.exists():
+            paths.append(CachePath(
+                path=lutris_cache,
+                name="Lutris Cache",
+                category=Category.GAME,
+                description="Lutris game manager cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Lutris",
+            ))
+
+        # Heroic Games Launcher (Epic Games on Linux)
+        heroic_cache = home / ".config" / "heroic" / "store_cache"
+        if heroic_cache.exists():
+            paths.append(CachePath(
+                path=heroic_cache,
+                name="Heroic Games Cache",
+                category=Category.GAME,
+                description="Heroic Games Launcher (Epic) cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Heroic",
+            ))
+
+        # Minecraft
+        minecraft_paths = [
+            (home / ".minecraft" / "assets", "Minecraft Assets", "Minecraft game assets cache"),
+            (home / ".minecraft" / "versions", "Minecraft Versions", "Minecraft version cache"),
+        ]
+        for path, name, desc in minecraft_paths:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.GAME,
+                    description=desc,
+                    risk_level=RiskLevel.MODERATE,
+                    app_specific=True,
+                    app_name="Minecraft",
+                ))
+
+        # Unity
+        unity_cache = home / ".cache" / "unity3d"
+        if unity_cache.exists():
+            paths.append(CachePath(
+                path=unity_cache,
+                name="Unity Editor Cache",
+                category=Category.GAME,
+                description="Unity game engine editor cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Unity",
+            ))
+
+        # Wine prefixes
+        wine_cache = home / ".wine" / "drive_c" / "windows" / "temp"
+        if wine_cache.exists():
+            paths.append(CachePath(
+                path=wine_cache,
+                name="Wine Temp",
+                category=Category.GAME,
+                description="Wine Windows emulation temp files",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Wine",
+            ))
+
+        return paths

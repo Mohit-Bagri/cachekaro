@@ -22,6 +22,7 @@ from cachekaro.platforms.base import (
     PlatformBase,
     PlatformInfo,
     RiskLevel,
+    identify_app_from_path,
 )
 
 
@@ -109,526 +110,282 @@ class MacOSPlatform(PlatformBase):
         return False
 
     def get_cache_paths(self) -> list[CachePath]:
-        """Get all macOS cache paths."""
+        """
+        Get all macOS cache paths using automatic discovery.
+
+        This method automatically discovers all application caches in standard
+        macOS cache locations, identifying apps by their folder names.
+        """
         if self._cache_paths:
             return self._cache_paths
 
         home = self.get_home_dir()
         library = home / "Library"
-
-        paths = []
+        paths: list[CachePath] = []
 
         # ============================================================
-        # USER CACHES (~/Library/Caches) - 100% Safe
+        # AUTO-DISCOVER: ~/Library/Caches (Main cache directory)
         # ============================================================
         caches = library / "Caches"
-
-        # System caches
-        paths.extend([
-            CachePath(
-                path=caches / "com.apple.textunderstandingd",
-                name="Apple Text Understanding",
-                category=Category.SYSTEM_CACHE,
-                description="Apple text analysis cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "SiriTTS",
-                name="Siri TTS",
-                category=Category.SYSTEM_CACHE,
-                description="Siri text-to-speech cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "GeoServices",
-                name="GeoServices",
-                category=Category.SYSTEM_CACHE,
-                description="Apple location services cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "com.apple.Safari",
-                name="Safari Cache",
-                category=Category.BROWSER,
-                description="Safari browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Safari",
-            ),
-        ])
-
-        # Browser caches
-        paths.extend([
-            CachePath(
-                path=caches / "Google",
-                name="Google/Chrome Cache",
-                category=Category.BROWSER,
-                description="Google Chrome browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Chrome",
-            ),
-            CachePath(
-                path=caches / "BraveSoftware",
-                name="Brave Browser Cache",
-                category=Category.BROWSER,
-                description="Brave browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Brave",
-            ),
-            CachePath(
-                path=caches / "Firefox",
-                name="Firefox Cache",
-                category=Category.BROWSER,
-                description="Firefox browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Firefox",
-            ),
-            CachePath(
-                path=caches / "com.microsoft.Edge",
-                name="Microsoft Edge Cache",
-                category=Category.BROWSER,
-                description="Microsoft Edge browser cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Edge",
-            ),
-        ])
-
-        # Application caches
-        paths.extend([
-            CachePath(
-                path=caches / "com.spotify.client",
-                name="Spotify Cache",
-                category=Category.APPLICATION,
-                description="Spotify streaming cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Spotify",
-            ),
-            CachePath(
-                path=caches / "JetBrains",
-                name="JetBrains IDE Cache",
-                category=Category.DEVELOPMENT,
-                description="JetBrains IDEs cache (IntelliJ, PyCharm, WebStorm, etc.)",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="JetBrains",
-            ),
-            CachePath(
-                path=caches / "electron",
-                name="Electron Apps Cache",
-                category=Category.APPLICATION,
-                description="Electron-based applications cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "com.lwouis.alt-tab-macos",
-                name="Alt-Tab Cache",
-                category=Category.APPLICATION,
-                description="Alt-Tab window switcher cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Alt-Tab",
-            ),
-            CachePath(
-                path=caches / "com.openai.chat",
-                name="ChatGPT Cache",
-                category=Category.APPLICATION,
-                description="ChatGPT desktop app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="ChatGPT",
-            ),
-            CachePath(
-                path=caches / "com.discord.Discord",
-                name="Discord Cache",
-                category=Category.APPLICATION,
-                description="Discord app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Discord",
-            ),
-            CachePath(
-                path=caches / "com.hnc.Discord",
-                name="Discord (Alt) Cache",
-                category=Category.APPLICATION,
-                description="Discord alternative app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Discord",
-            ),
-            CachePath(
-                path=caches / "Slack",
-                name="Slack Cache",
-                category=Category.APPLICATION,
-                description="Slack messaging app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Slack",
-            ),
-            CachePath(
-                path=caches / "com.tinyspeck.slackmacgap",
-                name="Slack (Mac) Cache",
-                category=Category.APPLICATION,
-                description="Slack Mac app cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Slack",
-            ),
-            CachePath(
-                path=caches / "us.zoom.xos",
-                name="Zoom Cache",
-                category=Category.APPLICATION,
-                description="Zoom video conferencing cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Zoom",
-            ),
-        ])
-
-        # Development tool caches
-        paths.extend([
-            CachePath(
-                path=caches / "pnpm",
-                name="pnpm Package Cache",
-                category=Category.DEVELOPMENT,
-                description="pnpm package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "yarn",
-                name="Yarn Cache",
-                category=Category.DEVELOPMENT,
-                description="Yarn package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "pip",
-                name="pip Cache",
-                category=Category.DEVELOPMENT,
-                description="Python pip package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "Homebrew",
-                name="Homebrew Cache",
-                category=Category.DEVELOPMENT,
-                description="Homebrew package downloads cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "node-gyp",
-                name="node-gyp Cache",
-                category=Category.DEVELOPMENT,
-                description="Node.js native addon build cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "typescript",
-                name="TypeScript Cache",
-                category=Category.DEVELOPMENT,
-                description="TypeScript compiler cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "ms-playwright-go",
-                name="Playwright Cache",
-                category=Category.DEVELOPMENT,
-                description="Playwright browser automation cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "CocoaPods",
-                name="CocoaPods Cache",
-                category=Category.DEVELOPMENT,
-                description="iOS/macOS dependency manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=caches / "org.carthage.CarthageKit",
-                name="Carthage Cache",
-                category=Category.DEVELOPMENT,
-                description="iOS/macOS Carthage dependency cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        if caches.exists():
+            # Exclude our own cache and temporary system folders
+            exclude = ["cachekaro", "TemporaryItems", "CloudKit"]
+            discovered = self.discover_caches_in_directory(caches, exclude_patterns=exclude)
+            paths.extend(discovered)
 
         # ============================================================
-        # HIDDEN CACHES (~/.cache) - Safe
+        # AUTO-DISCOVER: ~/.cache (XDG-style cache)
         # ============================================================
         hidden_cache = home / ".cache"
-
-        paths.extend([
-            CachePath(
-                path=hidden_cache / "huggingface",
-                name="HuggingFace Models",
-                category=Category.DEVELOPMENT,
-                description="HuggingFace AI models cache (can be large!)",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=hidden_cache / "puppeteer",
-                name="Puppeteer Browsers",
-                category=Category.DEVELOPMENT,
-                description="Puppeteer browser automation cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=hidden_cache / "pip",
-                name="pip HTTP Cache",
-                category=Category.DEVELOPMENT,
-                description="pip HTTP cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=hidden_cache / "pre-commit",
-                name="pre-commit Cache",
-                category=Category.DEVELOPMENT,
-                description="pre-commit hooks cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=hidden_cache / "uv",
-                name="uv Cache",
-                category=Category.DEVELOPMENT,
-                description="uv Python package manager cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        if hidden_cache.exists():
+            discovered = self.discover_caches_in_directory(hidden_cache)
+            paths.extend(discovered)
 
         # ============================================================
-        # NPM CACHE (~/.npm) - Safe
+        # AUTO-DISCOVER: ~/Library/Logs
         # ============================================================
-        paths.append(
-            CachePath(
-                path=home / ".npm" / "_cacache",
-                name="NPM Cache",
-                category=Category.DEVELOPMENT,
-                description="NPM package manager cache",
-                risk_level=RiskLevel.SAFE,
-            )
-        )
+        logs = library / "Logs"
+        if logs.exists():
+            for item in logs.iterdir():
+                if item.is_dir():
+                    try:
+                        if any(item.iterdir()):
+                            app_name, _ = identify_app_from_path(item.name)
+                            paths.append(CachePath(
+                                path=item,
+                                name=f"{app_name} Logs",
+                                category=Category.LOGS,
+                                description=f"Log files for {app_name}",
+                                risk_level=RiskLevel.SAFE,
+                                app_specific=True,
+                                app_name=app_name,
+                            ))
+                    except PermissionError:
+                        continue
 
         # ============================================================
-        # APPLICATION SUPPORT CACHES
+        # SPECIFIC: Application Support caches (need deeper paths)
         # ============================================================
         app_support = library / "Application Support"
 
+        # VS Code and variants
+        vscode_apps = [
+            ("Code", "VS Code"),
+            ("Cursor", "Cursor"),
+            ("VSCodium", "VSCodium"),
+        ]
+        for folder, name in vscode_apps:
+            base = app_support / folder
+            if base.exists():
+                for cache_folder in ["Cache", "CachedData", "CachedExtensionVSIXs", "CachedProfilesData"]:
+                    cache_path = base / cache_folder
+                    if cache_path.exists():
+                        paths.append(CachePath(
+                            path=cache_path,
+                            name=f"{name} {cache_folder}",
+                            category=Category.DEVELOPMENT,
+                            description=f"{name} {cache_folder}",
+                            risk_level=RiskLevel.SAFE,
+                            app_specific=True,
+                            app_name=name,
+                        ))
+
         # Chrome Service Workers
-        paths.append(
-            CachePath(
-                path=app_support / "Google" / "Chrome" / "Default" / "Service Worker",
+        chrome_sw = app_support / "Google" / "Chrome" / "Default" / "Service Worker"
+        if chrome_sw.exists():
+            paths.append(CachePath(
+                path=chrome_sw,
                 name="Chrome Service Workers",
                 category=Category.BROWSER,
                 description="Chrome web app service workers (PWA cache)",
                 risk_level=RiskLevel.SAFE,
-                clean_contents_only=False,
                 app_specific=True,
                 app_name="Chrome",
-            )
-        )
-
-        # VS Code caches
-        paths.extend([
-            CachePath(
-                path=app_support / "Code" / "Cache",
-                name="VS Code Cache",
-                category=Category.DEVELOPMENT,
-                description="Visual Studio Code cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-            CachePath(
-                path=app_support / "Code" / "CachedData",
-                name="VS Code CachedData",
-                category=Category.DEVELOPMENT,
-                description="VS Code cached compiled data",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-            CachePath(
-                path=app_support / "Code" / "CachedExtensionVSIXs",
-                name="VS Code Extension Cache",
-                category=Category.DEVELOPMENT,
-                description="VS Code old extension downloads",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-            CachePath(
-                path=app_support / "Code" / "CachedProfilesData",
-                name="VS Code Profiles Cache",
-                category=Category.DEVELOPMENT,
-                description="VS Code profile data cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="VS Code",
-            ),
-        ])
-
-        # Cursor (VS Code fork)
-        paths.extend([
-            CachePath(
-                path=app_support / "Cursor" / "Cache",
-                name="Cursor Cache",
-                category=Category.DEVELOPMENT,
-                description="Cursor editor cache",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Cursor",
-            ),
-            CachePath(
-                path=app_support / "Cursor" / "CachedData",
-                name="Cursor CachedData",
-                category=Category.DEVELOPMENT,
-                description="Cursor editor cached compiled data",
-                risk_level=RiskLevel.SAFE,
-                app_specific=True,
-                app_name="Cursor",
-            ),
-        ])
+            ))
 
         # ============================================================
-        # LOGS
+        # SPECIFIC: Development tool caches (fixed locations)
         # ============================================================
-        logs = library / "Logs"
+        dev_caches = [
+            (home / ".npm" / "_cacache", "npm Cache", "npm package manager cache"),
+            (home / ".gradle" / "caches", "Gradle Cache", "Gradle build system cache"),
+            (home / ".m2" / "repository", "Maven Repository", "Maven dependency cache"),
+            (home / ".cargo" / "registry" / "cache", "Cargo Cache", "Rust Cargo package cache"),
+            (home / "go" / "pkg" / "mod" / "cache", "Go Module Cache", "Go module download cache"),
+            (home / ".docker" / "buildx", "Docker Buildx Cache", "Docker buildx builder cache"),
+            (home / ".cocoapods" / "repos", "CocoaPods Repos", "CocoaPods repository cache"),
+            (home / ".pub-cache", "Dart/Flutter Cache", "Dart and Flutter package cache"),
+            (home / ".nuget" / "packages", "NuGet Cache", ".NET NuGet package cache"),
+            (home / ".composer" / "cache", "Composer Cache", "PHP Composer package cache"),
+            (home / ".gem", "RubyGems Cache", "Ruby gems cache"),
+            (home / ".bundle" / "cache", "Bundler Cache", "Ruby Bundler cache"),
+        ]
 
-        paths.extend([
-            CachePath(
-                path=logs / "JetBrains",
-                name="JetBrains Logs",
-                category=Category.LOGS,
-                description="JetBrains IDE log files",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=logs / "DiagnosticReports",
-                name="Diagnostic Reports",
-                category=Category.LOGS,
-                description="macOS crash reports and diagnostics",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=logs / "Claude",
-                name="Claude Logs",
-                category=Category.LOGS,
-                description="Claude AI app logs",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=logs / "Homebrew",
-                name="Homebrew Logs",
-                category=Category.LOGS,
-                description="Homebrew installation logs",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=logs / "Spotify",
-                name="Spotify Logs",
-                category=Category.LOGS,
-                description="Spotify application logs",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        for path, name, description in dev_caches:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.DEVELOPMENT,
+                    description=description,
+                    risk_level=RiskLevel.SAFE,
+                ))
 
         # ============================================================
-        # DEVELOPER DIRECTORY (Xcode)
+        # SPECIFIC: Xcode (large development caches)
         # ============================================================
         developer = library / "Developer"
+        xcode_caches = [
+            (developer / "Xcode" / "DerivedData", "Xcode DerivedData", "Xcode build artifacts (can be very large!)"),
+            (developer / "Xcode" / "Archives", "Xcode Archives", "Xcode archived builds (review before deleting)"),
+            (developer / "CoreSimulator" / "Caches", "iOS Simulator Cache", "iOS Simulator cache"),
+            (developer / "CoreSimulator" / "Devices", "iOS Simulator Devices", "iOS Simulator device data"),
+        ]
 
-        paths.extend([
-            CachePath(
-                path=developer / "Xcode" / "DerivedData",
-                name="Xcode DerivedData",
-                category=Category.DEVELOPMENT,
-                description="Xcode build artifacts (can be very large!)",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=developer / "Xcode" / "Archives",
-                name="Xcode Archives",
-                category=Category.DEVELOPMENT,
-                description="Xcode archived builds (review before deleting)",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=developer / "CoreSimulator" / "Caches",
-                name="iOS Simulator Cache",
-                category=Category.DEVELOPMENT,
-                description="iOS Simulator cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
+        for path, name, description in xcode_caches:
+            if path.exists():
+                risk = RiskLevel.MODERATE if "Archives" in name or "Devices" in name else RiskLevel.SAFE
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.DEVELOPMENT,
+                    description=description,
+                    risk_level=risk,
+                    app_specific=True,
+                    app_name="Xcode",
+                ))
+
+        # ============================================================
+        # GAME CACHES
+        # ============================================================
+        paths.extend(self.get_game_cache_paths())
 
         # ============================================================
         # TRASH & DOWNLOADS
         # ============================================================
-        paths.extend([
-            CachePath(
-                path=home / ".Trash",
+        trash = home / ".Trash"
+        if trash.exists():
+            paths.append(CachePath(
+                path=trash,
                 name="Trash",
                 category=Category.TRASH,
                 description="Files in Trash (permanently delete)",
                 risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / "Downloads",
+            ))
+
+        downloads = home / "Downloads"
+        if downloads.exists():
+            paths.append(CachePath(
+                path=downloads,
                 name="Downloads",
                 category=Category.DOWNLOADS,
                 description="Downloaded files (review before deleting!)",
                 risk_level=RiskLevel.CAUTION,
-            ),
-        ])
+            ))
 
         # NOTE: ~/Library/Containers is NOT included because it contains
         # sandboxed app data (iMessage, Mail, etc.), not cache.
-        # Deleting it would cause data loss.
-
-        # ============================================================
-        # ADDITIONAL DEVELOPMENT CACHES
-        # ============================================================
-        paths.extend([
-            CachePath(
-                path=home / ".gradle" / "caches",
-                name="Gradle Cache",
-                category=Category.DEVELOPMENT,
-                description="Gradle build system cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".m2" / "repository",
-                name="Maven Repository",
-                category=Category.DEVELOPMENT,
-                description="Maven dependency cache (review before deleting)",
-                risk_level=RiskLevel.MODERATE,
-            ),
-            CachePath(
-                path=home / ".cargo" / "registry" / "cache",
-                name="Cargo Registry Cache",
-                category=Category.DEVELOPMENT,
-                description="Rust Cargo package cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / "go" / "pkg" / "mod" / "cache",
-                name="Go Module Cache",
-                category=Category.DEVELOPMENT,
-                description="Go module download cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-            CachePath(
-                path=home / ".docker" / "buildx",
-                name="Docker Buildx Cache",
-                category=Category.DEVELOPMENT,
-                description="Docker buildx builder cache",
-                risk_level=RiskLevel.SAFE,
-            ),
-        ])
 
         self._cache_paths = paths
         return self._cache_paths
+
+    def get_game_cache_paths(self) -> list[CachePath]:
+        """Get macOS game-specific cache paths."""
+        home = self.get_home_dir()
+        library = home / "Library"
+        app_support = library / "Application Support"
+        paths: list[CachePath] = []
+
+        # Steam
+        steam_paths = [
+            (app_support / "Steam" / "appcache", "Steam App Cache", "Steam application cache"),
+            (app_support / "Steam" / "depotcache", "Steam Depot Cache", "Steam game depot cache"),
+            (app_support / "Steam" / "htmlcache", "Steam HTML Cache", "Steam browser cache"),
+            (library / "Caches" / "com.valvesoftware.steam", "Steam Cache", "Steam main cache"),
+        ]
+        for path, name, desc in steam_paths:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.GAME,
+                    description=desc,
+                    risk_level=RiskLevel.SAFE,
+                    app_specific=True,
+                    app_name="Steam",
+                ))
+
+        # Epic Games
+        epic_cache = library / "Caches" / "com.epicgames.EpicGamesLauncher"
+        if epic_cache.exists():
+            paths.append(CachePath(
+                path=epic_cache,
+                name="Epic Games Cache",
+                category=Category.GAME,
+                description="Epic Games Launcher cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Epic Games",
+            ))
+
+        # Riot Games (Valorant, League of Legends)
+        riot_paths = [
+            (app_support / "Riot Games", "Riot Games Data", "Riot Games client data"),
+            (library / "Caches" / "com.riotgames.RiotClient", "Riot Client Cache", "Riot Client cache"),
+        ]
+        for path, name, desc in riot_paths:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.GAME,
+                    description=desc,
+                    risk_level=RiskLevel.MODERATE,
+                    app_specific=True,
+                    app_name="Riot Games",
+                ))
+
+        # Battle.net / Blizzard
+        blizzard_cache = app_support / "Battle.net" / "Cache"
+        if blizzard_cache.exists():
+            paths.append(CachePath(
+                path=blizzard_cache,
+                name="Battle.net Cache",
+                category=Category.GAME,
+                description="Blizzard Battle.net cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Battle.net",
+            ))
+
+        # Minecraft
+        minecraft_paths = [
+            (app_support / "minecraft" / "assets", "Minecraft Assets", "Minecraft game assets cache"),
+            (app_support / "minecraft" / "versions", "Minecraft Versions", "Minecraft version cache"),
+        ]
+        for path, name, desc in minecraft_paths:
+            if path.exists():
+                paths.append(CachePath(
+                    path=path,
+                    name=name,
+                    category=Category.GAME,
+                    description=desc,
+                    risk_level=RiskLevel.MODERATE,
+                    app_specific=True,
+                    app_name="Minecraft",
+                ))
+
+        # Unity
+        unity_cache = library / "Caches" / "com.unity3d.UnityEditor"
+        if unity_cache.exists():
+            paths.append(CachePath(
+                path=unity_cache,
+                name="Unity Editor Cache",
+                category=Category.GAME,
+                description="Unity game engine editor cache",
+                risk_level=RiskLevel.SAFE,
+                app_specific=True,
+                app_name="Unity",
+            ))
+
+        return paths
