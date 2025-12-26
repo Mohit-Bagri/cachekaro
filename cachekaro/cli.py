@@ -55,7 +55,8 @@ def print_banner() -> None:
 ░╚════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░{Colors.RESET}
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
-    {Colors.GRAY}Version {__version__} | Cache Karo!{Colors.RESET}
+    {Colors.GRAY}Version {__version__} | Clean it up!{Colors.RESET}
+    {Colors.GRAY}Made in India 🇮🇳 with ❤️ by {Colors.PURPLE}Mohit Bagri{Colors.RESET}
 """
     print(banner)
 

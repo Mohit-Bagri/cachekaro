@@ -46,7 +46,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/mohitbagri/cachekaro.git
+git clone https://github.com/Mohit-Bagri/cachekaro.git
 
 # 2. Navigate to the ROOT folder (not cachekaro/cachekaro)
 cd cachekaro
@@ -275,7 +275,7 @@ custom_paths:                   # Add your own cache paths
 
 ```bash
 # ► Setup development environment
-git clone https://github.com/mohitbagri/cachekaro.git
+git clone https://github.com/Mohit-Bagri/cachekaro.git
 cd cachekaro
 python3 -m venv venv
 source venv/bin/activate
@@ -309,7 +309,7 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-Made with ❤️ by [Mohit Bagri](https://github.com/mohitbagri)
+Made in India 🇮🇳 with ❤️ by [Mohit Bagri](https://github.com/Mohit-Bagri)
 
 *Cache Karo!* — Clean it up!
 
