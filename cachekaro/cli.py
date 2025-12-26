@@ -19,16 +19,24 @@ from cachekaro.platforms import get_platform, get_platform_name
 from cachekaro.platforms.base import Category, RiskLevel
 
 
-# ANSI color codes
+# ANSI color codes - Purple/Dark theme
 class Colors:
     RESET = "\033[0m"
     BOLD = "\033[1m"
-    RED = "\033[0;31m"
-    GREEN = "\033[0;32m"
-    YELLOW = "\033[1;33m"
-    BLUE = "\033[0;34m"
-    CYAN = "\033[0;36m"
-    MAGENTA = "\033[0;35m"
+    DIM = "\033[2m"
+    # Primary theme colors
+    PURPLE = "\033[38;5;141m"       # Light purple
+    DEEP_PURPLE = "\033[38;5;99m"   # Deep purple
+    VIOLET = "\033[38;5;183m"       # Soft violet
+    # Accent colors
+    WHITE = "\033[38;5;255m"
+    GRAY = "\033[38;5;245m"
+    GREEN = "\033[38;5;114m"        # Soft green
+    RED = "\033[38;5;204m"          # Soft red/pink
+    YELLOW = "\033[38;5;221m"       # Soft yellow
+    BLUE = "\033[38;5;111m"         # Soft blue
+    CYAN = "\033[38;5;116m"         # Soft cyan
+    MAGENTA = "\033[38;5;176m"      # Soft magenta
 
 
 def color(text: str, c: str) -> str:
@@ -39,16 +47,15 @@ def color(text: str, c: str) -> str:
 def print_banner() -> None:
     """Print the CacheKaro banner."""
     banner = f"""
-{Colors.CYAN}{Colors.BOLD}
-   ____           _          _  __
-  / ___|__ _  ___| |__   ___| |/ /__ _ _ __ ___
- | |   / _` |/ __| '_ \\ / _ \\ ' // _` | '__/ _ \\
- | |__| (_| | (__| | | |  __/ . \\ (_| | | | (_) |
-  \\____\\__,_|\\___|_| |_|\\___|_|\\_\\__,_|_|  \\___/
+{Colors.PURPLE}{Colors.BOLD}░█████╗░░█████╗░░█████╗░██╗░░██╗███████╗██╗░░██╗░█████╗░██████╗░░█████╗░
+██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔════╝██║░██╔╝██╔══██╗██╔══██╗██╔══██╗
+██║░░╚═╝███████║██║░░╚═╝███████║█████╗░░█████═╝░███████║██████╔╝██║░░██║
+██║░░██╗██╔══██║██║░░██╗██╔══██║██╔══╝░░██╔═██╗░██╔══██║██╔══██╗██║░░██║
+╚█████╔╝██║░░██║╚█████╔╝██║░░██║███████╗██║░╚██╗██║░░██║██║░░██║╚█████╔╝
+░╚════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░{Colors.RESET}
 
-{Colors.RESET}
-    {Colors.YELLOW}Cross-Platform Storage & Cache Manager{Colors.RESET}
-    {Colors.CYAN}Version {__version__} | Cache Karo!{Colors.RESET}
+    {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
+    {Colors.GRAY}Version {__version__} | Cache Karo!{Colors.RESET}
 """
     print(banner)
 
@@ -59,7 +66,7 @@ def progress_callback(name: str, current: int, total: int) -> None:
     bar_width = 30
     filled = int(bar_width * current / total)
     bar = "█" * filled + "░" * (bar_width - filled)
-    print(f"\r{Colors.CYAN}[{bar}] {percent:5.1f}% - Scanning: {name[:40]:40s}{Colors.RESET}", end="", flush=True)
+    print(f"\r{Colors.PURPLE}[{bar}] {percent:5.1f}%{Colors.RESET} {Colors.GRAY}- Scanning: {name[:40]:40s}{Colors.RESET}", end="", flush=True)
     if current == total:
         print()  # New line when done
 
@@ -93,7 +100,7 @@ def confirm_clean(item: CacheItem) -> bool:
 def clean_progress_callback(name: str, current: int, total: int, size_freed: int) -> None:
     """Display progress during cleaning."""
     size_str = format_size(size_freed)
-    print(f"\r{Colors.GREEN}[{current}/{total}] Cleaned: {size_str:>12s}{Colors.RESET}", end="", flush=True)
+    print(f"\r{Colors.PURPLE}[{current}/{total}]{Colors.RESET} {Colors.GREEN}Cleaned: {size_str:>12s}{Colors.RESET}", end="", flush=True)
     if current == total:
         print()
 
@@ -141,8 +148,8 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     if show_ui:
         print_banner()
         platform = get_platform()
-        print(f"{color('Platform:', Colors.BOLD)} {platform.name}")
-        print(f"{color('Scanning cache locations...', Colors.CYAN)}\n")
+        print(f"{color('Platform:', Colors.WHITE)} {Colors.PURPLE}{platform.name}{Colors.RESET}")
+        print(f"{color('Scanning cache locations...', Colors.GRAY)}\n")
     else:
         platform = get_platform()
 
@@ -203,15 +210,15 @@ def cmd_clean(args: argparse.Namespace) -> int:
     print_banner()
 
     platform = get_platform()
-    print(f"{color('Platform:', Colors.BOLD)} {platform.name}")
+    print(f"{color('Platform:', Colors.WHITE)} {Colors.PURPLE}{platform.name}{Colors.RESET}")
 
     # Determine cleaning mode
     if args.dry_run:
         mode = CleanMode.DRY_RUN
-        print(f"{color('Mode:', Colors.YELLOW)} Dry Run (no files will be deleted)\n")
+        print(f"{color('Mode:', Colors.WHITE)} {Colors.YELLOW}Dry Run{Colors.RESET} {Colors.GRAY}(no files will be deleted){Colors.RESET}\n")
     elif args.auto:
         mode = CleanMode.AUTO
-        print(f"{color('Mode:', Colors.RED)} Auto (all items will be cleaned without confirmation)")
+        print(f"{color('Mode:', Colors.WHITE)} {Colors.RED}Auto{Colors.RESET} {Colors.GRAY}(all items will be cleaned without confirmation){Colors.RESET}")
         try:
             response = input(f"\n{color('Are you sure?', Colors.RED)} [y/N]: ").strip().lower()
             if response != "y":
@@ -223,7 +230,7 @@ def cmd_clean(args: argparse.Namespace) -> int:
         print()
     else:
         mode = CleanMode.INTERACTIVE
-        print(f"{color('Mode:', Colors.CYAN)} Interactive (confirm each item)\n")
+        print(f"{color('Mode:', Colors.WHITE)} {Colors.PURPLE}Interactive{Colors.RESET} {Colors.GRAY}(confirm each item){Colors.RESET}\n")
 
     # Parse options
     max_risk = RiskLevel.SAFE
@@ -249,7 +256,7 @@ def cmd_clean(args: argparse.Namespace) -> int:
             return 1
 
     # First, scan to find items
-    print(f"{color('Scanning cache locations...', Colors.CYAN)}")
+    print(f"{color('Scanning cache locations...', Colors.GRAY)}")
     analyzer = Analyzer(
         platform=platform,
         stale_threshold_days=args.stale_days,
@@ -270,8 +277,8 @@ def cmd_clean(args: argparse.Namespace) -> int:
         print(f"\n{color('No items to clean.', Colors.YELLOW)}")
         return 0
 
-    print(f"\n{color(f'Found {len(items)} items to clean', Colors.BOLD)}")
-    print(f"Total size: {color(format_size(sum(i.size_bytes for i in items)), Colors.RED)}\n")
+    print(f"\n{color(f'Found {len(items)} items to clean', Colors.WHITE)}")
+    print(f"Total size: {color(format_size(sum(i.size_bytes for i in items)), Colors.PURPLE)}\n")
 
     # Create cleaner
     cleaner = Cleaner(
@@ -286,9 +293,9 @@ def cmd_clean(args: argparse.Namespace) -> int:
     summary = cleaner.clean(items)
 
     # Print summary
-    print(f"\n{color('=' * 60, Colors.CYAN)}")
-    print(f"{color('CLEANING SUMMARY', Colors.BOLD)}")
-    print(f"{color('=' * 60, Colors.CYAN)}")
+    print(f"\n{color('═' * 60, Colors.PURPLE)}")
+    print(f"{color('CLEANING SUMMARY', Colors.WHITE)}")
+    print(f"{color('═' * 60, Colors.PURPLE)}")
 
     if args.dry_run:
         print(f"\n{color('[DRY RUN]', Colors.YELLOW)} Would have freed: {color(summary.formatted_size_freed, Colors.GREEN)}")
@@ -304,9 +311,9 @@ def cmd_clean(args: argparse.Namespace) -> int:
 
     # Show current disk usage
     disk = platform.get_disk_usage()
-    print(f"{color('Current disk status:', Colors.BOLD)}")
-    print(f"  Used: {format_size(disk.used_bytes)} ({disk.used_percent:.1f}%)")
-    print(f"  Free: {format_size(disk.free_bytes)}")
+    print(f"{color('Current disk status:', Colors.WHITE)}")
+    print(f"  {Colors.GRAY}Used:{Colors.RESET} {format_size(disk.used_bytes)} ({disk.used_percent:.1f}%)")
+    print(f"  {Colors.GRAY}Free:{Colors.RESET} {Colors.GREEN}{format_size(disk.free_bytes)}{Colors.RESET}")
 
     return 0
 
@@ -316,7 +323,7 @@ def cmd_report(args: argparse.Namespace) -> int:
     print_banner()
 
     platform = get_platform()
-    print(f"{color('Generating report...', Colors.CYAN)}\n")
+    print(f"{color('Generating report...', Colors.GRAY)}\n")
 
     analyzer = Analyzer(
         platform=platform,
@@ -337,7 +344,7 @@ def cmd_report(args: argparse.Namespace) -> int:
 
     # Export
     final_path = exporter.export_to_file(result, output_path)
-    print(f"\n{color('Report saved to:', Colors.GREEN)} {final_path}")
+    print(f"\n{color('Report saved to:', Colors.WHITE)} {Colors.PURPLE}{final_path}{Colors.RESET}")
 
     return 0
 
@@ -357,26 +364,26 @@ def cmd_info(args: argparse.Namespace) -> int:
     info = platform.get_platform_info()
     disk = platform.get_disk_usage()
 
-    print(f"{color('System Information', Colors.BOLD)}")
-    print(f"{'=' * 40}")
-    print(f"Platform: {info.name}")
-    print(f"Version: {info.version}")
-    print(f"Architecture: {info.architecture}")
-    print(f"Hostname: {info.hostname}")
-    print(f"Username: {info.username}")
-    print(f"Home Directory: {info.home_dir}")
+    print(f"{color('System Information', Colors.WHITE)}")
+    print(f"{Colors.PURPLE}{'═' * 40}{Colors.RESET}")
+    print(f"{Colors.GRAY}Platform:{Colors.RESET} {Colors.PURPLE}{info.name}{Colors.RESET}")
+    print(f"{Colors.GRAY}Version:{Colors.RESET} {info.version}")
+    print(f"{Colors.GRAY}Architecture:{Colors.RESET} {info.architecture}")
+    print(f"{Colors.GRAY}Hostname:{Colors.RESET} {info.hostname}")
+    print(f"{Colors.GRAY}Username:{Colors.RESET} {info.username}")
+    print(f"{Colors.GRAY}Home Directory:{Colors.RESET} {info.home_dir}")
     print()
-    print(f"{color('Disk Usage', Colors.BOLD)}")
-    print(f"{'=' * 40}")
-    print(f"Total: {format_size(disk.total_bytes)}")
-    print(f"Used: {format_size(disk.used_bytes)} ({disk.used_percent:.1f}%)")
-    print(f"Free: {format_size(disk.free_bytes)}")
+    print(f"{color('Disk Usage', Colors.WHITE)}")
+    print(f"{Colors.PURPLE}{'═' * 40}{Colors.RESET}")
+    print(f"{Colors.GRAY}Total:{Colors.RESET} {format_size(disk.total_bytes)}")
+    print(f"{Colors.GRAY}Used:{Colors.RESET} {format_size(disk.used_bytes)} ({disk.used_percent:.1f}%)")
+    print(f"{Colors.GRAY}Free:{Colors.RESET} {Colors.GREEN}{format_size(disk.free_bytes)}{Colors.RESET}")
     print()
-    print(f"{color('Cache Paths', Colors.BOLD)}")
-    print(f"{'=' * 40}")
+    print(f"{color('Cache Paths', Colors.WHITE)}")
+    print(f"{Colors.PURPLE}{'═' * 40}{Colors.RESET}")
     existing = platform.get_existing_paths()
-    print(f"Total defined: {len(platform.get_cache_paths())}")
-    print(f"Existing on system: {len(existing)}")
+    print(f"{Colors.GRAY}Total defined:{Colors.RESET} {len(platform.get_cache_paths())}")
+    print(f"{Colors.GRAY}Existing on system:{Colors.RESET} {Colors.PURPLE}{len(existing)}{Colors.RESET}")
 
     return 0
 
