@@ -585,20 +585,9 @@ class MacOSPlatform(PlatformBase):
             ),
         ])
 
-        # ============================================================
-        # CONTAINER APPS
-        # ============================================================
-        containers = library / "Containers"
-
-        paths.append(
-            CachePath(
-                path=containers,
-                name="Container Apps",
-                category=Category.CONTAINER,
-                description="Sandboxed app data (use with caution)",
-                risk_level=RiskLevel.CAUTION,
-            )
-        )
+        # NOTE: ~/Library/Containers is NOT included because it contains
+        # sandboxed app data (iMessage, Mail, etc.), not cache.
+        # Deleting it would cause data loss.
 
         # ============================================================
         # ADDITIONAL DEVELOPMENT CACHES
