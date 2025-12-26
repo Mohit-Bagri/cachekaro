@@ -106,7 +106,7 @@ class HtmlExporter(Exporter):
             text-align: center;
             margin-bottom: 40px;
             padding: 40px 20px;
-            background: linear-gradient(135deg, rgba(191, 0, 255, 0.2), rgba(0, 245, 255, 0.2));
+            background: linear-gradient(135deg, rgba(191, 0, 255, 0.15), rgba(0, 245, 255, 0.15), rgba(255, 0, 128, 0.1));
             border-radius: 20px;
             border: 1px solid var(--border-glow);
             position: relative;
@@ -119,9 +119,10 @@ class HtmlExporter(Exporter):
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan), transparent);
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-yellow), var(--neon-magenta), var(--neon-cyan), transparent);
             animation: glow-line 3s linear infinite;
+            box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-magenta);
         }}
 
         header::after {{
@@ -130,15 +131,35 @@ class HtmlExporter(Exporter):
             bottom: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-magenta), var(--neon-cyan), var(--neon-magenta), transparent);
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-magenta), var(--neon-yellow), var(--neon-cyan), var(--neon-magenta), transparent);
             animation: glow-line 3s linear infinite reverse;
+            box-shadow: 0 0 20px var(--neon-magenta), 0 0 40px var(--neon-cyan);
         }}
 
         @keyframes glow-line {{
-            0% {{ opacity: 0.5; }}
+            0% {{ opacity: 0.6; }}
             50% {{ opacity: 1; }}
-            100% {{ opacity: 0.5; }}
+            100% {{ opacity: 0.6; }}
+        }}
+
+        .ascii-art {{
+            font-family: monospace;
+            font-size: 0.55rem;
+            line-height: 1.1;
+            white-space: pre;
+            background: linear-gradient(180deg, #ff0080, #ff00ff, #bf00ff, #8000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.8)) drop-shadow(0 0 20px rgba(191, 0, 255, 0.6)) drop-shadow(0 0 30px rgba(255, 0, 255, 0.4));
+            margin-bottom: 15px;
+            animation: ascii-glow 2s ease-in-out infinite alternate;
+        }}
+
+        @keyframes ascii-glow {{
+            0% {{ filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.8)) drop-shadow(0 0 20px rgba(191, 0, 255, 0.6)); }}
+            100% {{ filter: drop-shadow(0 0 15px rgba(255, 0, 128, 1)) drop-shadow(0 0 30px rgba(191, 0, 255, 0.8)) drop-shadow(0 0 40px rgba(255, 0, 255, 0.5)); }}
         }}
 
         header h1 {{
@@ -152,20 +173,24 @@ class HtmlExporter(Exporter):
             background-clip: text;
             text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
             letter-spacing: 4px;
+            display: none;
         }}
 
         header .subtitle {{
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-secondary);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(136, 136, 170, 0.3);
         }}
 
         header .timestamp {{
-            margin-top: 10px;
-            color: var(--neon-cyan);
+            margin-top: 15px;
+            color: var(--neon-yellow);
             font-family: 'Orbitron', monospace;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            letter-spacing: 1px;
         }}
 
         /* Grid Layout */
@@ -221,7 +246,27 @@ class HtmlExporter(Exporter):
             color: var(--neon-cyan);
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5), 0 0 20px rgba(0, 245, 255, 0.3);
+        }}
+
+        .card h2.magenta {{
+            color: var(--neon-magenta);
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.3);
+        }}
+
+        .card h2.yellow {{
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px rgba(255, 255, 0, 0.3);
+        }}
+
+        .card h2.pink {{
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5), 0 0 20px rgba(255, 0, 128, 0.3);
+        }}
+
+        .card h2.green {{
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
         }}
 
         /* Stats Grid */
@@ -253,6 +298,7 @@ class HtmlExporter(Exporter):
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 0 8px rgba(0, 245, 255, 0.6));
         }}
 
         .stat-value.warning {{
@@ -260,6 +306,15 @@ class HtmlExporter(Exporter):
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 0 8px rgba(255, 136, 0, 0.6));
+        }}
+
+        .stat-value.magenta {{
+            background: linear-gradient(135deg, var(--neon-magenta), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.6));
         }}
 
         .stat-label {{
@@ -448,6 +503,12 @@ class HtmlExporter(Exporter):
 <body>
     <div class="container">
         <header>
+            <div class="ascii-art">░█████╗░░█████╗░░█████╗░██╗░░██╗███████╗██╗░░██╗░█████╗░██████╗░░█████╗░
+██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔════╝██║░██╔╝██╔══██╗██╔══██╗██╔══██╗
+██║░░╚═╝███████║██║░░╚═╝███████║█████╗░░█████═╝░███████║██████╔╝██║░░██║
+██║░░██╗██╔══██║██║░░██╗██╔══██║██╔══╝░░██╔═██╗░██╔══██║██╔══██╗██║░░██║
+╚█████╔╝██║░░██║╚█████╔╝██║░░██║███████╗██║░╚██╗██║░░██║██║░░██║╚█████╔╝
+░╚════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░</div>
             <h1>CACHEKARO</h1>
             <p class="subtitle">Storage & Cache Analysis Report</p>
             <p class="timestamp">// GENERATED: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} //</p>
@@ -478,10 +539,10 @@ class HtmlExporter(Exporter):
             </div>
 
             <div class="card">
-                <h2>// Cache Summary</h2>
+                <h2 class="magenta">// Cache Summary</h2>
                 <div class="stat-grid">
                     <div class="stat">
-                        <div class="stat-value">{result.formatted_total_size}</div>
+                        <div class="stat-value magenta">{result.formatted_total_size}</div>
                         <div class="stat-label">Total Cache</div>
                     </div>
                     <div class="stat">
@@ -489,7 +550,7 @@ class HtmlExporter(Exporter):
                         <div class="stat-label">Cleanable (Safe)</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">{result.total_files:,}</div>
+                        <div class="stat-value magenta">{result.total_files:,}</div>
                         <div class="stat-label">Files</div>
                     </div>
                     <div class="stat">
@@ -503,14 +564,14 @@ class HtmlExporter(Exporter):
         <!-- Charts -->
         <div class="grid">
             <div class="card">
-                <h2>// Space by Category</h2>
+                <h2 class="yellow">// Space by Category</h2>
                 <div class="chart-container">
                     <canvas id="categoryChart"></canvas>
                 </div>
             </div>
 
             <div class="card">
-                <h2>// Top Consumers</h2>
+                <h2 class="pink">// Top Consumers</h2>
                 <div class="chart-container">
                     <canvas id="topItemsChart"></canvas>
                 </div>
@@ -519,7 +580,7 @@ class HtmlExporter(Exporter):
 
         <!-- Detailed Table -->
         <div class="card">
-            <h2>// All Cache Locations</h2>
+            <h2 class="green">// All Cache Locations</h2>
             <input type="text" class="search-box" id="searchBox" placeholder="&gt; Search cache locations...">
             <table id="cacheTable">
                 <thead>
