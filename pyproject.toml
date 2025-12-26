@@ -9,10 +9,10 @@ description = "Cross-platform storage and cache analyzer & cleaner - Cache Karo!
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Mohit Bagri", email = "mohitbagri@example.com"}
+    {name = "MOHIT BAGRI", email = "mohitbagri@example.com"}
 ]
 maintainers = [
-    {name = "Mohit Bagri", email = "mohitbagri@example.com"}
+    {name = "MOHIT BAGRI", email = "mohitbagri@example.com"}
 ]
 keywords = [
     "cache",

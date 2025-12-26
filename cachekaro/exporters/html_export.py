@@ -21,7 +21,7 @@ def _d(x: str) -> str:
 
 
 _attr = {
-    "n": "TW9oaXQgQmFncmk=",  # Name
+    "n": "TU9ISVQgQkFHUkk=",  # Name
     "u": "aHR0cHM6Ly9naXRodWIuY29tL01vaGl0LUJhZ3Jp",  # Profile URL
     "r": "aHR0cHM6Ly9naXRodWIuY29tL01vaGl0LUJhZ3JpL2NhY2hla2Fybw==",  # Repo URL
     "c": "SW5kaWE=",  # Country

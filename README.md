@@ -309,7 +309,7 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-Made in 🇮🇳 with ❤️ by [Mohit Bagri](https://github.com/Mohit-Bagri)
+Made in 🇮🇳 with ❤️ by [MOHIT BAGRI](https://github.com/Mohit-Bagri)
 
 **CacheKaro** - *Clean It Up!*
 

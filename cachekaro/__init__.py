@@ -6,7 +6,7 @@ Cache Karo! (Hindi-English: "Clean It Up!")
 """
 
 __version__ = "2.0.5"
-__author__ = "Mohit Bagri"
+__author__ = "MOHIT BAGRI"
 __license__ = "MIT"
 
 from cachekaro.platforms.detector import get_platform, get_platform_name

@@ -50,7 +50,7 @@ def _m(x: str) -> str:
     return base64.b64decode(x).decode()
 
 
-_a = "TW9oaXQgQmFncmk="  # Attribution identifier
+_a = "TU9ISVQgQkFHUkk="  # Attribution identifier
 _c = "SW5kaWE="  # Country identifier
 
 
