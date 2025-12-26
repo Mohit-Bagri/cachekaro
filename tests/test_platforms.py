@@ -93,7 +93,8 @@ class TestPlatformBase:
         assert usage.total_bytes > 0
         assert usage.used_bytes >= 0
         assert usage.free_bytes >= 0
-        assert usage.total_bytes == usage.used_bytes + usage.free_bytes
+        # Note: total may not equal used + free due to reserved blocks on some systems
+        assert usage.used_bytes + usage.free_bytes <= usage.total_bytes
         assert 0 <= usage.used_percent <= 100
 
     def test_cache_paths(self):
