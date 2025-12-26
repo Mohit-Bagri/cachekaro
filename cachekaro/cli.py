@@ -122,8 +122,8 @@ def print_banner(check_update: bool = True) -> None:
 ░╚════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░{Colors.RESET}
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
-    {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}{update_line}
-    {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}
+    {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}
+    {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}{update_line}
 """
     print(banner)
 
@@ -282,17 +282,23 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     # Export result
     exporter: Exporter
     if args.format == "text":
-        exporter = TextExporter(use_colors=not args.no_color)
-        output = exporter.export(result)
-        print(output)
+        if args.output:
+            # No colors when saving to file
+            exporter = TextExporter(use_colors=False)
+            output_path = exporter.export_to_file(result, args.output)
+            print(f"\n{color('Report saved to:', Colors.GREEN)} {output_path}")
+        else:
+            exporter = TextExporter(use_colors=not args.no_color)
+            output = exporter.export(result)
+            print(output)
     else:
         exporter = get_exporter(args.format)
-        output = exporter.export(result)
 
         if args.output:
             output_path = exporter.export_to_file(result, args.output)
             print(f"\n{color('Report saved to:', Colors.GREEN)} {output_path}")
         else:
+            output = exporter.export(result)
             print(output)
 
     return 0
@@ -427,13 +433,19 @@ def cmd_report(args: argparse.Namespace) -> int:
 
     # Determine output format
     output_format = args.format or "html"
-    exporter = get_exporter(output_format)
 
     # Generate output path if not specified
     output_path = args.output
     if not output_path:
+        ext = "html" if output_format == "html" else output_format
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = f"cachekaro_report_{timestamp}.{exporter.file_extension}"
+        output_path = f"cachekaro_report_{timestamp}.{ext}"
+
+    # Use no colors for text files
+    if output_format == "text":
+        exporter = TextExporter(use_colors=False)
+    else:
+        exporter = get_exporter(output_format)
 
     # Export
     final_path = exporter.export_to_file(result, output_path)
@@ -446,6 +458,12 @@ def cmd_version(args: argparse.Namespace) -> int:
     """Show version information."""
     print(f"CacheKaro version {__version__}")
     print(f"Platform: {get_platform_name()}")
+
+    # Check for updates
+    available, latest = is_update_available()
+    if available and latest:
+        print(f"\n{Colors.YELLOW}⚡ Update available: v{latest}{Colors.RESET} → pip install --upgrade cachekaro")
+
     return 0
 
 

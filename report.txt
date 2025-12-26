@@ -1,0 +1,67 @@
+
+======================================================================
+             CACHEKARO - STORAGE & CACHE ANALYSIS REPORT              
+======================================================================
+
+Platform: macOS
+Scan Time: 2025-12-26 20:44:22
+Duration: 0.29 seconds
+
+
+DISK OVERVIEW
+----------------------------------------------------------------------
+
+Total Disk Space: 228.27 GB
+Used Space: 124.56 GB (54.6%)
+Free Space: 103.71 GB
+
+
+CACHE SUMMARY
+----------------------------------------------------------------------
+
+Total Cache Size: 1.38 GB
+Cleanable (Safe): 615.65 MB
+Total Files: 6,691
+Cache Locations: 29
+
+
+BREAKDOWN BY CATEGORY
+----------------------------------------------------------------------
+
+  📥 Downloads               793.24 MB (1 items)
+  💻 Development             447.05 MB (3 items)
+  🌐 Browser                  92.72 MB (3 items)
+  📦 Application              75.65 MB (16 items)
+  📁 Game                    168.80 KB (1 items)
+  📝 Logs                     59.94 KB (4 items)
+  🗑️ Trash                         0 B (1 items)
+
+
+TOP 15 CACHE CONSUMERS
+----------------------------------------------------------------------
+
+   1. Downloads                              793.24 MB [WARN]
+   2. npm Cache                              315.14 MB [SAFE]
+   3. Go Cache                               126.33 MB [SAFE]
+   4. Chrome Cache                            92.57 MB [SAFE]
+   5. E5bundlecache Cache                     27.94 MB [SAFE]
+   6. Helpd Cache                             27.84 MB [SAFE]
+   7. Parsecd Cache                           16.35 MB [SAFE]
+   8. pip Cache                                5.58 MB [SAFE]
+   9. Spotlight Cache                          1.24 MB [SAFE]
+  10. Apple Media Services Cache               1.04 MB [SAFE]
+  11. Amsengagementd Cache                   409.48 KB [SAFE]
+  12. Fba Cache                              244.99 KB [SAFE]
+  13. Remindd Cache                          184.07 KB [SAFE]
+  14. Duetexpertd Cache                      169.64 KB [SAFE]
+  15. EA Cache                               168.80 KB [SAFE]
+
+
+CLEANABLE SPACE ESTIMATE
+----------------------------------------------------------------------
+
+  Safe to clean: 615.65 MB
+
+======================================================================
+               Run 'cachekaro clean' to start cleaning                
+======================================================================
