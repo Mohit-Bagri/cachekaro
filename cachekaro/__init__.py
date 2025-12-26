@@ -2,10 +2,10 @@
 CacheKaro - Cross-platform Storage & Cache Manager
 
 A production-ready tool to analyze and clean cache/storage on macOS, Linux, and Windows.
-Cache Karo! (Hindi-English: "Clean it up!")
+Cache Karo! (Hindi-English: "Clean It Up!")
 """
 
-__version__ = "2.0.3"
+__version__ = "2.0.5"
 __author__ = "Mohit Bagri"
 __license__ = "MIT"
 

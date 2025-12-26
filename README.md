@@ -4,7 +4,7 @@
 
 ### Cross-Platform Storage & Cache Manager
 
-**CacheKaro** — *Clean it up!*
+**CacheKaro** — *Clean It Up!*
 
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -311,6 +311,6 @@ MIT License — see [LICENSE](LICENSE)
 
 Made in 🇮🇳 with ❤️ by [Mohit Bagri](https://github.com/Mohit-Bagri)
 
-**CacheKaro** — *Clean it up!*
+**CacheKaro** — *Clean It Up!*
 
 </div>
