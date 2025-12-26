@@ -13,6 +13,13 @@ import sys
 import urllib.request
 from datetime import datetime
 
+# Initialize colorama for Windows CMD ANSI support
+try:
+    import colorama
+    colorama.init()
+except ImportError:
+    pass
+
 from cachekaro import __version__
 from cachekaro.core.analyzer import Analyzer
 from cachekaro.core.cleaner import Cleaner, CleanMode
