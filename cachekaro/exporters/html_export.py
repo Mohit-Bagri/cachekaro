@@ -4,6 +4,8 @@ HTML exporter for CacheKaro.
 Produces interactive HTML reports with charts and tables.
 """
 
+from __future__ import annotations
+
 import html
 import json
 from datetime import datetime

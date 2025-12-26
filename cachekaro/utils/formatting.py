@@ -2,10 +2,10 @@
 Formatting utilities for CacheKaro.
 """
 
-from typing import Optional, Union
+from __future__ import annotations
 
 
-def format_size(size_bytes: Union[int, float], precision: int = 2) -> str:
+def format_size(size_bytes: int | float, precision: int = 2) -> str:
     """
     Format size in bytes to human-readable string.
 
@@ -56,7 +56,7 @@ def format_duration(seconds: float) -> str:
         return f"{hours}h {minutes}m"
 
 
-def format_number(num: Union[int, float]) -> str:
+def format_number(num: int | float) -> str:
     """
     Format number with thousand separators.
 
@@ -137,7 +137,7 @@ def create_progress_bar(
 def create_table(
     headers: list[str],
     rows: list[list[str]],
-    min_widths: Optional[list[int]] = None,
+    min_widths: list[int] | None = None,
 ) -> str:
     """
     Create a formatted text table.

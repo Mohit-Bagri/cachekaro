@@ -4,6 +4,7 @@ Plain text exporter for CacheKaro.
 Produces formatted text output suitable for terminal display.
 """
 
+from __future__ import annotations
 
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.scan_result import ScanResult

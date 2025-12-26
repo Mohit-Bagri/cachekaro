@@ -4,6 +4,8 @@ Command-line interface for CacheKaro.
 Provides analyze, clean, and report commands with various options.
 """
 
+from __future__ import annotations
+
 import argparse
 import sys
 from datetime import datetime

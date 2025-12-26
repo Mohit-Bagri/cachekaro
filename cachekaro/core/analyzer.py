@@ -4,9 +4,11 @@ Storage analyzer for CacheKaro.
 Orchestrates scanning and generates comprehensive analysis results.
 """
 
+from __future__ import annotations
+
 import time
 from datetime import datetime
-from typing import Callable, Optional
+from typing import Callable
 
 from cachekaro.core.scanner import Scanner
 from cachekaro.models.cache_item import CacheItem
@@ -28,7 +30,7 @@ class Analyzer:
         min_size_bytes: int = 0,
         include_empty: bool = False,
         max_workers: int = 4,
-        progress_callback: Optional[Callable[[str, int, int], None]] = None,
+        progress_callback: Callable[[str, int, int], None] | None = None,
     ):
         """
         Initialize the analyzer.
@@ -56,7 +58,7 @@ class Analyzer:
 
     def analyze(
         self,
-        categories: Optional[list[Category]] = None,
+        categories: list[Category] | None = None,
         max_risk: RiskLevel = RiskLevel.CAUTION,
         include_non_existent: bool = False,
     ) -> ScanResult:

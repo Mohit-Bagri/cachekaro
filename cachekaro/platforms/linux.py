@@ -5,6 +5,8 @@ Provides Linux-specific cache paths, system operations, and utilities.
 Follows XDG Base Directory Specification.
 """
 
+from __future__ import annotations
+
 import getpass
 import os
 import platform
@@ -13,7 +15,6 @@ import socket
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 from cachekaro.platforms.base import (
     CachePath,
@@ -71,7 +72,7 @@ class LinuxPlatform(PlatformBase):
         """Get system temp directory."""
         return Path(tempfile.gettempdir())
 
-    def get_trash_path(self) -> Optional[Path]:
+    def get_trash_path(self) -> Path | None:
         """Get Linux Trash path (FreeDesktop.org spec)."""
         # Check XDG_DATA_HOME first
         xdg_data = os.environ.get("XDG_DATA_HOME")

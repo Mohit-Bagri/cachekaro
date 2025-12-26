@@ -4,6 +4,8 @@ CSV exporter for CacheKaro.
 Produces CSV output for spreadsheet analysis.
 """
 
+from __future__ import annotations
+
 import csv
 import io
 

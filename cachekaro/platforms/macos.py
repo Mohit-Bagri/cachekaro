@@ -4,6 +4,8 @@ macOS platform implementation for CacheKaro.
 Provides macOS-specific cache paths, system operations, and utilities.
 """
 
+from __future__ import annotations
+
 import getpass
 import os
 import platform
@@ -12,7 +14,6 @@ import socket
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 from cachekaro.platforms.base import (
     CachePath,
@@ -55,7 +56,7 @@ class MacOSPlatform(PlatformBase):
         """Get system temp directory."""
         return Path(tempfile.gettempdir())
 
-    def get_trash_path(self) -> Optional[Path]:
+    def get_trash_path(self) -> Path | None:
         """Get macOS Trash path."""
         trash = self.get_home_dir() / ".Trash"
         return trash if trash.exists() else None

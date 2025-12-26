@@ -4,6 +4,8 @@ File and directory scanner for CacheKaro.
 Provides efficient scanning with metadata collection.
 """
 
+from __future__ import annotations
+
 import os
 import stat
 from collections import defaultdict
@@ -11,7 +13,7 @@ from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable
 
 from cachekaro.models.cache_item import CacheItem, FileInfo, FileTypeStats
 from cachekaro.platforms.base import CachePath
@@ -35,7 +37,7 @@ class Scanner:
         collect_file_details: bool = True,
         max_largest_files: int = 10,
         stale_threshold_days: int = 30,
-        progress_callback: Optional[Callable[[str, int, int], None]] = None,
+        progress_callback: Callable[[str, int, int], None] | None = None,
     ):
         """
         Initialize the scanner.
@@ -117,9 +119,9 @@ class Scanner:
             lambda: FileTypeStats(extension="", count=0, total_size=0)
         )
         largest_files: list[FileInfo] = []
-        oldest_time: Optional[datetime] = None
-        newest_time: Optional[datetime] = None
-        last_accessed: Optional[datetime] = None
+        oldest_time: datetime | None = None
+        newest_time: datetime | None = None
+        last_accessed: datetime | None = None
 
         try:
             for entry in self._walk_directory(path):

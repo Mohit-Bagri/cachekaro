@@ -2,10 +2,11 @@
 Data models for cache items and file information.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from cachekaro.platforms.base import Category, RiskLevel
 
@@ -17,9 +18,9 @@ class FileInfo:
     name: str
     size_bytes: int
     extension: str
-    last_accessed: Optional[datetime] = None
-    last_modified: Optional[datetime] = None
-    created_time: Optional[datetime] = None
+    last_accessed: datetime | None = None
+    last_modified: datetime | None = None
+    created_time: datetime | None = None
 
     @property
     def age_days(self) -> int:
@@ -86,16 +87,16 @@ class CacheItem:
     dir_count: int = 0
 
     # Time information
-    last_accessed: Optional[datetime] = None
-    last_modified: Optional[datetime] = None
-    oldest_file: Optional[datetime] = None
-    newest_file: Optional[datetime] = None
+    last_accessed: datetime | None = None
+    last_modified: datetime | None = None
+    oldest_file: datetime | None = None
+    newest_file: datetime | None = None
 
     # Status
     exists: bool = True
     is_accessible: bool = True
     is_empty: bool = False
-    error_message: Optional[str] = None
+    error_message: str | None = None
 
     # Cleaning info
     risk_level: RiskLevel = RiskLevel.SAFE
@@ -105,7 +106,7 @@ class CacheItem:
 
     # App info
     app_specific: bool = False
-    app_name: Optional[str] = None
+    app_name: str | None = None
 
     # Detailed breakdown
     file_types: dict[str, FileTypeStats] = field(default_factory=dict)

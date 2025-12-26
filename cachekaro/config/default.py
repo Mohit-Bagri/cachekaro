@@ -2,10 +2,11 @@
 Default configuration and config file handling for CacheKaro.
 """
 
+from __future__ import annotations
+
 import os
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -56,7 +57,7 @@ class Config:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Config":
+    def from_dict(cls, data: dict) -> Config:
         """Create config from dictionary."""
         settings = Settings(**data.get("settings", {}))
         exclusions = Exclusions(**data.get("exclusions", {}))
@@ -94,7 +95,7 @@ def get_config_path() -> Path:
     return config_dir / "config.yaml"
 
 
-def load_config(config_path: Optional[Path] = None) -> Config:
+def load_config(config_path: Path | None = None) -> Config:
     """
     Load configuration from file.
 
@@ -121,7 +122,7 @@ def load_config(config_path: Optional[Path] = None) -> Config:
         return Config()
 
 
-def save_config(config: Config, config_path: Optional[Path] = None) -> Path:
+def save_config(config: Config, config_path: Path | None = None) -> Path:
     """
     Save configuration to file.
 
@@ -144,7 +145,7 @@ def save_config(config: Config, config_path: Optional[Path] = None) -> Path:
     return config_path
 
 
-def create_default_config(config_path: Optional[Path] = None) -> Path:
+def create_default_config(config_path: Path | None = None) -> Path:
     """
     Create a default configuration file with comments.
 

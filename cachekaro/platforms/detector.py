@@ -5,6 +5,8 @@ Automatically detects the current operating system and returns
 the appropriate platform implementation.
 """
 
+from __future__ import annotations
+
 import platform
 import sys
 from typing import TYPE_CHECKING
@@ -32,7 +34,7 @@ def get_platform_name() -> str:
         return "unknown"
 
 
-def get_platform() -> "PlatformBase":
+def get_platform() -> PlatformBase:
     """
     Get the platform implementation for the current OS.
 

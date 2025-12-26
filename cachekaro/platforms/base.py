@@ -2,11 +2,12 @@
 Base platform class defining the interface for platform-specific implementations.
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 
 class RiskLevel(Enum):
@@ -41,7 +42,7 @@ class CachePath:
     clean_contents_only: bool = True  # If True, clean contents but keep directory
     requires_admin: bool = False
     app_specific: bool = False
-    app_name: Optional[str] = None
+    app_name: str | None = None
 
     def exists(self) -> bool:
         """Check if the path exists."""
@@ -100,7 +101,7 @@ class PlatformBase(ABC):
 
     def __init__(self) -> None:
         self._cache_paths: list[CachePath] = []
-        self._platform_info: Optional[PlatformInfo] = None
+        self._platform_info: PlatformInfo | None = None
 
     @property
     @abstractmethod
@@ -134,7 +135,7 @@ class PlatformBase(ABC):
         pass
 
     @abstractmethod
-    def get_trash_path(self) -> Optional[Path]:
+    def get_trash_path(self) -> Path | None:
         """Get the path to the user's trash/recycle bin."""
         pass
 

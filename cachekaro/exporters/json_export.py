@@ -4,9 +4,11 @@ JSON exporter for CacheKaro.
 Produces structured JSON output for programmatic use.
 """
 
+from __future__ import annotations
+
 import json
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.models.scan_result import ScanResult
@@ -28,7 +30,7 @@ class JsonExporter(Exporter):
     Produces structured JSON with complete metadata for API/automation use.
     """
 
-    def __init__(self, indent: Optional[int] = 2, include_file_details: bool = True):
+    def __init__(self, indent: int | None = 2, include_file_details: bool = True):
         """
         Initialize the JSON exporter.
 
@@ -36,7 +38,7 @@ class JsonExporter(Exporter):
             indent: JSON indentation level (None for compact)
             include_file_details: Include detailed file info
         """
-        self.indent: Optional[int] = indent
+        self.indent: int | None = indent
         self.include_file_details = include_file_details
 
     @property

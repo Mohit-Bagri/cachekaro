@@ -2,9 +2,10 @@
 Data models for scan results and summaries.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
 from cachekaro.models.cache_item import CacheItem
 from cachekaro.platforms.base import Category, RiskLevel
@@ -96,7 +97,7 @@ class ScanResult:
     Provides comprehensive statistics and filtering capabilities.
     """
     items: list[CacheItem] = field(default_factory=list)
-    metadata: Optional[ScanMetadata] = None
+    metadata: ScanMetadata | None = None
     disk_total: int = 0
     disk_used: int = 0
     disk_free: int = 0

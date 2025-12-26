@@ -4,6 +4,8 @@ Windows platform implementation for CacheKaro.
 Provides Windows-specific cache paths, system operations, and utilities.
 """
 
+from __future__ import annotations
+
 import ctypes
 import getpass
 import os
@@ -13,7 +15,6 @@ import socket
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 from cachekaro.platforms.base import (
     CachePath,
@@ -77,7 +78,7 @@ class WindowsPlatform(PlatformBase):
             return Path(programdata)
         return Path("C:/ProgramData")
 
-    def get_trash_path(self) -> Optional[Path]:
+    def get_trash_path(self) -> Path | None:
         """
         Get Windows Recycle Bin path.
 

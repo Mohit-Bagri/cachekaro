@@ -4,13 +4,15 @@ Cache cleaner for CacheKaro.
 Provides safe cleaning with multiple modes and backup capabilities.
 """
 
+from __future__ import annotations
+
 import shutil
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable
 
 from cachekaro.models.cache_item import CacheItem
 from cachekaro.models.scan_result import ScanResult
@@ -32,10 +34,10 @@ class CleanResult:
     success: bool
     size_freed: int
     files_deleted: int
-    error_message: Optional[str] = None
+    error_message: str | None = None
     was_skipped: bool = False
     was_backed_up: bool = False
-    backup_path: Optional[Path] = None
+    backup_path: Path | None = None
 
 
 @dataclass
@@ -48,8 +50,8 @@ class CleanSummary:
     total_size_freed: int = 0
     total_files_deleted: int = 0
     results: list[CleanResult] = field(default_factory=list)
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
     duration_seconds: float = 0.0
 
     @property
@@ -106,10 +108,10 @@ class Cleaner:
         self,
         mode: CleanMode = CleanMode.INTERACTIVE,
         backup_enabled: bool = False,
-        backup_dir: Optional[Path] = None,
+        backup_dir: Path | None = None,
         max_risk: RiskLevel = RiskLevel.SAFE,
-        confirm_callback: Optional[Callable[[CacheItem], bool]] = None,
-        progress_callback: Optional[Callable[[str, int, int, int], None]] = None,
+        confirm_callback: Callable[[CacheItem], bool] | None = None,
+        progress_callback: Callable[[str, int, int, int], None] | None = None,
     ):
         """
         Initialize the cleaner.
@@ -341,7 +343,7 @@ class Cleaner:
     def clean_from_result(
         self,
         result: ScanResult,
-        categories: Optional[list] = None,
+        categories: list | None = None,
         min_size_bytes: int = 0,
         stale_only: bool = False,
     ) -> CleanSummary:

@@ -4,6 +4,8 @@ Export formats for CacheKaro scan results.
 Supports text, JSON, CSV, and HTML output formats.
 """
 
+from __future__ import annotations
+
 from cachekaro.exporters.base import Exporter, ExportFormat
 from cachekaro.exporters.csv_export import CsvExporter
 from cachekaro.exporters.html_export import HtmlExporter

@@ -2,10 +2,11 @@
 Base exporter class for CacheKaro.
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
-from typing import Union
 
 from cachekaro.models.scan_result import ScanResult
 
@@ -54,7 +55,7 @@ class Exporter(ABC):
     def export_to_file(
         self,
         result: ScanResult,
-        output_path: Union[str, Path],
+        output_path: str | Path,
     ) -> Path:
         """
         Export scan result to a file.
