@@ -123,11 +123,31 @@ def print_banner(check_update: bool = True) -> None:
 
 def progress_callback(name: str, current: int, total: int) -> None:
     """Display progress during scanning."""
+    import shutil
+
     percent = (current / total) * 100
-    bar_width = 30
+    bar_width = 20
     filled = int(bar_width * current / total)
     bar = "█" * filled + "░" * (bar_width - filled)
-    print(f"\r{Colors.PURPLE}[{bar}] {percent:5.1f}%{Colors.RESET} {Colors.GRAY}- Scanning: {name[:40]:40s}{Colors.RESET}", end="", flush=True)
+
+    # Get terminal width, default to 80 if not available
+    try:
+        term_width = shutil.get_terminal_size().columns
+    except Exception:
+        term_width = 80
+
+    # Truncate name to fit within terminal width
+    # Format: "[████████░░░░░░░░░░░░] 100.0% - Scanning: name"
+    # Base length without name: ~45 chars (including ANSI codes stripped)
+    max_name_len = min(25, max(10, term_width - 50))
+    truncated_name = name[:max_name_len].ljust(max_name_len)
+
+    # Use ANSI escape to clear line and return to start for cross-terminal compatibility
+    # \033[2K clears entire line, \r moves cursor to start
+    line = f"{Colors.PURPLE}[{bar}]{Colors.RESET} {Colors.WHITE}{percent:5.1f}%{Colors.RESET} {Colors.GRAY}Scanning: {truncated_name}{Colors.RESET}"
+    sys.stdout.write(f"\033[2K\r{line}")
+    sys.stdout.flush()
+
     if current == total:
         print()  # New line when done
 
@@ -161,7 +181,12 @@ def confirm_clean(item: CacheItem) -> bool:
 def clean_progress_callback(name: str, current: int, total: int, size_freed: int) -> None:
     """Display progress during cleaning."""
     size_str = format_size(size_freed)
-    print(f"\r{Colors.PURPLE}[{current}/{total}]{Colors.RESET} {Colors.GREEN}Cleaned: {size_str:>12s}{Colors.RESET}", end="", flush=True)
+
+    # Use ANSI escape to clear line and return to start for cross-terminal compatibility
+    line = f"{Colors.PURPLE}[{current}/{total}]{Colors.RESET} {Colors.GREEN}Cleaned: {size_str:>12s}{Colors.RESET}"
+    sys.stdout.write(f"\033[2K\033[G{line}")
+    sys.stdout.flush()
+
     if current == total:
         print()
 
