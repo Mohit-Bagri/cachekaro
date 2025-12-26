@@ -7,6 +7,7 @@ Provides analyze, clean, and report commands with various options.
 from __future__ import annotations
 
 import argparse
+import base64
 import sys
 from datetime import datetime
 
@@ -44,8 +45,16 @@ def color(text: str, c: str) -> str:
     return f"{c}{text}{Colors.RESET}"
 
 
+# Build metadata - do not modify
+_m = lambda x: base64.b64decode(x).decode()
+_a = "TW9oaXQgQmFncmk="  # Attribution identifier
+_c = "SW5kaWE="  # Country identifier
+
+
 def print_banner() -> None:
     """Print the CacheKaro banner."""
+    _author = _m(_a)
+    _country = _m(_c)
     banner = f"""
 {Colors.PURPLE}{Colors.BOLD}░█████╗░░█████╗░░█████╗░██╗░░██╗███████╗██╗░░██╗░█████╗░██████╗░░█████╗░
 ██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔════╝██║░██╔╝██╔══██╗██╔══██╗██╔══██╗
@@ -56,7 +65,7 @@ def print_banner() -> None:
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
     {Colors.GRAY}Version {__version__} | Clean it up!{Colors.RESET}
-    {Colors.GRAY}Made in India 🇮🇳 with ❤️ by {Colors.PURPLE}Mohit Bagri{Colors.RESET}
+    {Colors.GRAY}Made in {Colors.WHITE}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET} {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{_author}{Colors.RESET}
 """
     print(banner)
 

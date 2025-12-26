@@ -11,7 +11,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-platform-support)
 [![Tests](https://img.shields.io/badge/tests-53%20passing-brightgreen.svg)](#-development)
 
-[Overview](#-overview) · [Installation](#-installation) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Config](#-configuration)
+[Overview](#-overview) · [Installation](#-installation) · [Uninstall](#-uninstall) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Config](#-configuration)
 
 </div>
 
