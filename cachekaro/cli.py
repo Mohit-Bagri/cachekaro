@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import argparse
 import base64
+import json
 import sys
+import urllib.request
 from datetime import datetime
 
 from cachekaro import __version__
@@ -53,11 +55,57 @@ def _m(x: str) -> str:
 _a = "TU9ISVQgQkFHUkk="  # Attribution identifier
 _c = "SW5kaWE="  # Country identifier
 
+# Cache for version check result
+_latest_version_cache: str | None = None
 
-def print_banner() -> None:
+
+def check_latest_version() -> str | None:
+    """Check PyPI for the latest version of CacheKaro."""
+    global _latest_version_cache
+    if _latest_version_cache is not None:
+        return _latest_version_cache
+
+    try:
+        url = "https://pypi.org/pypi/cachekaro/json"
+        request = urllib.request.Request(url, headers={"User-Agent": "CacheKaro"})
+        with urllib.request.urlopen(request, timeout=2) as response:
+            data = json.loads(response.read().decode())
+            _latest_version_cache = data["info"]["version"]
+            return _latest_version_cache
+    except Exception:
+        return None
+
+
+def is_update_available() -> tuple[bool, str | None]:
+    """Check if an update is available. Returns (is_available, latest_version)."""
+    latest = check_latest_version()
+    if latest is None:
+        return False, None
+
+    # Parse versions for comparison
+    def parse_version(v: str) -> tuple[int, ...]:
+        return tuple(int(x) for x in v.split("."))
+
+    try:
+        current = parse_version(__version__)
+        latest_parsed = parse_version(latest)
+        return latest_parsed > current, latest
+    except ValueError:
+        return False, None
+
+
+def print_banner(check_update: bool = True) -> None:
     """Print the CacheKaro banner."""
     _author = _m(_a)
     _country = _m(_c)
+
+    # Check for updates
+    update_line = ""
+    if check_update:
+        available, latest = is_update_available()
+        if available and latest:
+            update_line = f"\n    {Colors.YELLOW}{Colors.BOLD}⚡ Update available: v{latest}{Colors.RESET} {Colors.GRAY}→ pip install --upgrade cachekaro{Colors.RESET}"
+
     banner = f"""
 {Colors.PURPLE}{Colors.BOLD}░█████╗░░█████╗░░█████╗░██╗░░██╗███████╗██╗░░██╗░█████╗░██████╗░░█████╗░
 ██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔════╝██║░██╔╝██╔══██╗██╔══██╗██╔══██╗
@@ -67,7 +115,7 @@ def print_banner() -> None:
 ░╚════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░{Colors.RESET}
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
-    {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}
+    {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}{update_line}
     {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}
 """
     print(banner)
@@ -401,6 +449,34 @@ def cmd_info(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_update(args: argparse.Namespace) -> int:
+    """Check for updates and show upgrade instructions."""
+    print(f"\n{Colors.PURPLE}{Colors.BOLD}CacheKaro Update Check{Colors.RESET}")
+    print(f"{Colors.PURPLE}{'═' * 40}{Colors.RESET}\n")
+
+    print(f"{Colors.GRAY}Current version:{Colors.RESET} {Colors.WHITE}{__version__}{Colors.RESET}")
+    print(f"{Colors.GRAY}Checking PyPI for updates...{Colors.RESET}")
+
+    latest = check_latest_version()
+
+    if latest is None:
+        print(f"\n{Colors.YELLOW}Could not reach PyPI. Check your internet connection.{Colors.RESET}")
+        return 1
+
+    print(f"{Colors.GRAY}Latest version:{Colors.RESET}  {Colors.WHITE}{latest}{Colors.RESET}")
+
+    available, _ = is_update_available()
+
+    if available:
+        print(f"\n{Colors.GREEN}{Colors.BOLD}✓ New version available!{Colors.RESET}")
+        print(f"\n{Colors.WHITE}To upgrade, run:{Colors.RESET}")
+        print(f"  {Colors.CYAN}pip install --upgrade cachekaro{Colors.RESET}\n")
+    else:
+        print(f"\n{Colors.GREEN}{Colors.BOLD}✓ You're on the latest version!{Colors.RESET}\n")
+
+    return 0
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser."""
     parser = argparse.ArgumentParser(
@@ -568,6 +644,14 @@ For more information, visit: https://github.com/mohitbagri/cachekaro
         help="Show system information",
     )
     info_parser.set_defaults(func=cmd_info)
+
+    # update command
+    update_parser = subparsers.add_parser(
+        "update",
+        help="Check for updates",
+        aliases=["upgrade"],
+    )
+    update_parser.set_defaults(func=cmd_update)
 
     return parser
 

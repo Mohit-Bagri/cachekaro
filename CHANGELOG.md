@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.6] - 2025-12-26
+## [2.1.0] - 2025-12-26
+
+### Added
+- Auto-update check: Shows notification in banner when new version is available
+- New `cachekaro update` command to check for updates
+- Displays upgrade instructions with `pip install --upgrade cachekaro`
 
 ### Changed
 - Added all section headers to README navigation menu
