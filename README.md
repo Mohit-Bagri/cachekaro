@@ -309,8 +309,8 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-Made in India 🇮🇳 with ❤️ by [Mohit Bagri](https://github.com/Mohit-Bagri)
+Made in 🇮🇳 with ❤️ by [Mohit Bagri](https://github.com/Mohit-Bagri)
 
-*Cache Karo!* — Clean it up!
+**CacheKaro** — *Clean it up!*
 
 </div>

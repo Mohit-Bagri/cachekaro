@@ -65,7 +65,7 @@ def print_banner() -> None:
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
     {Colors.GRAY}Version {__version__} | Clean it up!{Colors.RESET}
-    {Colors.GRAY}Made in {Colors.WHITE}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET} {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{_author}{Colors.RESET}
+    {Colors.GRAY}Made in {Colors.WHITE}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{_author}{Colors.RESET}
 """
     print(banner)
 
