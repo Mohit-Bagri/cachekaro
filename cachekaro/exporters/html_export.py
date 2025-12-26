@@ -22,16 +22,16 @@ class HtmlExporter(Exporter):
     - Interactive charts (using Chart.js)
     - Sortable/filterable tables
     - Responsive design
-    - Dark/light mode support
+    - Cyberpunk neon theme
     """
 
-    def __init__(self, title: str = "CacheKaro Report", dark_mode: bool = False):
+    def __init__(self, title: str = "CacheKaro Report", dark_mode: bool = True):
         """
         Initialize the HTML exporter.
 
         Args:
             title: Page title
-            dark_mode: Use dark color scheme
+            dark_mode: Use dark color scheme (default True for cyberpunk theme)
         """
         self.title = title
         self.dark_mode = dark_mode
@@ -50,34 +50,32 @@ class HtmlExporter(Exporter):
         category_data = self._prepare_category_data(result)
         top_items_data = self._prepare_top_items_data(result)
 
-        # Build HTML
+        # Build HTML with cyberpunk neon theme
         html_content = f"""<!DOCTYPE html>
-<html lang="en" data-theme="{'dark' if self.dark_mode else 'light'}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{html.escape(self.title)}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {{
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --border-color: #dee2e6;
-            --accent-color: #0d6efd;
-            --success-color: #198754;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-        }}
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
 
-        [data-theme="dark"] {{
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --text-primary: #eaeaea;
-            --text-secondary: #a0a0a0;
-            --border-color: #404040;
-            --accent-color: #4da6ff;
+        :root {{
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --neon-cyan: #00f5ff;
+            --neon-magenta: #ff00ff;
+            --neon-purple: #bf00ff;
+            --neon-pink: #ff0080;
+            --neon-blue: #0080ff;
+            --neon-green: #00ff88;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff8800;
+            --text-primary: #ffffff;
+            --text-secondary: #8888aa;
+            --border-glow: rgba(0, 245, 255, 0.3);
         }}
 
         * {{
@@ -87,11 +85,15 @@ class HtmlExporter(Exporter):
         }}
 
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background-color: var(--bg-primary);
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at top, rgba(191, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(0, 245, 255, 0.1) 0%, transparent 50%);
         }}
 
         .container {{
@@ -99,44 +101,130 @@ class HtmlExporter(Exporter):
             margin: 0 auto;
         }}
 
+        /* Cyberpunk Header */
         header {{
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--accent-color), #6610f2);
-            border-radius: 12px;
-            color: white;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(191, 0, 255, 0.2), rgba(0, 245, 255, 0.2));
+            border-radius: 20px;
+            border: 1px solid var(--border-glow);
+            position: relative;
+            overflow: hidden;
+        }}
+
+        header::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan), transparent);
+            animation: glow-line 3s linear infinite;
+        }}
+
+        header::after {{
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-magenta), var(--neon-cyan), var(--neon-magenta), transparent);
+            animation: glow-line 3s linear infinite reverse;
+        }}
+
+        @keyframes glow-line {{
+            0% {{ opacity: 0.5; }}
+            50% {{ opacity: 1; }}
+            100% {{ opacity: 0.5; }}
         }}
 
         header h1 {{
-            font-size: 2.5rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+            letter-spacing: 4px;
         }}
 
         header .subtitle {{
-            opacity: 0.9;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }}
 
+        header .timestamp {{
+            margin-top: 10px;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+        }}
+
+        /* Grid Layout */
         .grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
         }}
 
+        /* Neon Cards */
         .card {{
-            background-color: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }}
+
+        .card::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--neon-cyan), transparent, var(--neon-magenta));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }}
+
+        .card:hover {{
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2), 0 0 20px rgba(191, 0, 255, 0.1);
+        }}
+
+        .card:hover::before {{
+            opacity: 1;
         }}
 
         .card h2 {{
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--accent-color);
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
         }}
 
+        /* Stats Grid */
         .stat-grid {{
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -145,27 +233,50 @@ class HtmlExporter(Exporter):
 
         .stat {{
             text-align: center;
-            padding: 15px;
-            background-color: var(--bg-primary);
-            border-radius: 8px;
+            padding: 20px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            transition: all 0.3s ease;
+        }}
+
+        .stat:hover {{
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
         }}
 
         .stat-value {{
+            font-family: 'Orbitron', monospace;
             font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        .stat-value.warning {{
+            background: linear-gradient(135deg, var(--neon-orange), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }}
 
         .stat-label {{
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
         }}
 
+        /* Chart Container */
         .chart-container {{
             position: relative;
             height: 300px;
         }}
 
+        /* Neon Table */
         table {{
             width: 100%;
             border-collapse: collapse;
@@ -173,98 +284,186 @@ class HtmlExporter(Exporter):
         }}
 
         th, td {{
-            padding: 12px;
+            padding: 15px 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
         }}
 
         th {{
-            background-color: var(--bg-primary);
-            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-cyan);
+            background: rgba(0, 245, 255, 0.05);
             cursor: pointer;
+            transition: all 0.2s ease;
         }}
 
         th:hover {{
-            background-color: var(--border-color);
+            background: rgba(0, 245, 255, 0.15);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }}
+
+        tr {{
+            transition: all 0.2s ease;
         }}
 
         tr:hover {{
-            background-color: var(--bg-primary);
+            background: rgba(0, 245, 255, 0.05);
         }}
 
-        .size-large {{ color: var(--danger-color); font-weight: bold; }}
-        .size-medium {{ color: var(--warning-color); }}
-        .size-small {{ color: var(--success-color); }}
+        /* Size Colors */
+        .size-large {{
+            color: var(--neon-magenta);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }}
+        .size-medium {{
+            color: var(--neon-orange);
+            font-weight: 600;
+        }}
+        .size-small {{
+            color: var(--neon-green);
+        }}
 
+        /* Risk Badges */
         .risk-safe {{
-            background-color: #d4edda;
-            color: #155724;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 136, 0.1));
+            color: var(--neon-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }}
         .risk-moderate {{
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            background: linear-gradient(135deg, rgba(255, 136, 0, 0.2), rgba(255, 136, 0, 0.1));
+            color: var(--neon-orange);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }}
         .risk-caution {{
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            background: linear-gradient(135deg, rgba(255, 0, 128, 0.2), rgba(255, 0, 128, 0.1));
+            color: var(--neon-pink);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 0, 128, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }}
 
+        /* Search Box */
         .search-box {{
             width: 100%;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--bg-primary);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
             color: var(--text-primary);
             font-size: 1rem;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
         }}
 
-        footer {{
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
+        .search-box:focus {{
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }}
+
+        .search-box::placeholder {{
             color: var(--text-secondary);
         }}
 
+        /* Footer */
+        footer {{
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(0, 245, 255, 0.1);
+        }}
+
+        footer p {{
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 2px;
+        }}
+
+        footer .neon-text {{
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {{
+            width: 8px;
+            height: 8px;
+        }}
+
+        ::-webkit-scrollbar-track {{
+            background: var(--bg-dark);
+        }}
+
+        ::-webkit-scrollbar-thumb {{
+            background: linear-gradient(var(--neon-cyan), var(--neon-magenta));
+            border-radius: 4px;
+        }}
+
+        /* Responsive */
         @media (max-width: 768px) {{
             .stat-grid {{
                 grid-template-columns: 1fr;
             }}
             header h1 {{
-                font-size: 1.8rem;
+                font-size: 2rem;
             }}
+            .stat-value {{
+                font-size: 1.4rem;
+            }}
+        }}
+
+        /* Glitch Animation for Header */
+        @keyframes glitch {{
+            0% {{ text-shadow: 2px 0 var(--neon-cyan), -2px 0 var(--neon-magenta); }}
+            25% {{ text-shadow: -2px 0 var(--neon-cyan), 2px 0 var(--neon-magenta); }}
+            50% {{ text-shadow: 2px 0 var(--neon-magenta), -2px 0 var(--neon-cyan); }}
+            75% {{ text-shadow: -2px 0 var(--neon-magenta), 2px 0 var(--neon-cyan); }}
+            100% {{ text-shadow: 2px 0 var(--neon-cyan), -2px 0 var(--neon-magenta); }}
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>CacheKaro</h1>
+            <h1>CACHEKARO</h1>
             <p class="subtitle">Storage & Cache Analysis Report</p>
-            <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p class="timestamp">// GENERATED: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} //</p>
         </header>
 
         <!-- Summary Stats -->
         <div class="grid">
             <div class="card">
-                <h2>Disk Overview</h2>
+                <h2>// Disk Overview</h2>
                 <div class="stat-grid">
                     <div class="stat">
                         <div class="stat-value">{result.formatted_disk_total}</div>
                         <div class="stat-label">Total Space</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">{result.formatted_disk_used}</div>
+                        <div class="stat-value warning">{result.formatted_disk_used}</div>
                         <div class="stat-label">Used</div>
                     </div>
                     <div class="stat">
@@ -272,14 +471,14 @@ class HtmlExporter(Exporter):
                         <div class="stat-label">Free</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">{result.disk_usage_percent:.1f}%</div>
+                        <div class="stat-value warning">{result.disk_usage_percent:.1f}%</div>
                         <div class="stat-label">Usage</div>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>Cache Summary</h2>
+                <h2>// Cache Summary</h2>
                 <div class="stat-grid">
                     <div class="stat">
                         <div class="stat-value">{result.formatted_total_size}</div>
@@ -304,14 +503,14 @@ class HtmlExporter(Exporter):
         <!-- Charts -->
         <div class="grid">
             <div class="card">
-                <h2>Space by Category</h2>
+                <h2>// Space by Category</h2>
                 <div class="chart-container">
                     <canvas id="categoryChart"></canvas>
                 </div>
             </div>
 
             <div class="card">
-                <h2>Top Consumers</h2>
+                <h2>// Top Consumers</h2>
                 <div class="chart-container">
                     <canvas id="topItemsChart"></canvas>
                 </div>
@@ -320,8 +519,8 @@ class HtmlExporter(Exporter):
 
         <!-- Detailed Table -->
         <div class="card">
-            <h2>All Cache Locations</h2>
-            <input type="text" class="search-box" id="searchBox" placeholder="Search cache locations...">
+            <h2>// All Cache Locations</h2>
+            <input type="text" class="search-box" id="searchBox" placeholder="&gt; Search cache locations...">
             <table id="cacheTable">
                 <thead>
                     <tr>
@@ -340,12 +539,19 @@ class HtmlExporter(Exporter):
         </div>
 
         <footer>
-            <p>Generated by CacheKaro | Cache Karo!</p>
+            <p>Generated by <span class="neon-text">CACHEKARO</span> | Cache Karo!</p>
         </footer>
     </div>
 
     <script>
-        // Category Pie Chart
+        // Neon color palette for charts
+        const neonColors = [
+            '#00f5ff', '#ff00ff', '#bf00ff', '#ff0080',
+            '#0080ff', '#00ff88', '#ffff00', '#ff8800',
+            '#00ffcc', '#ff4444'
+        ];
+
+        // Category Doughnut Chart
         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
         new Chart(categoryCtx, {{
             type: 'doughnut',
@@ -353,28 +559,36 @@ class HtmlExporter(Exporter):
                 labels: {json.dumps(category_data['labels'])},
                 datasets: [{{
                     data: {json.dumps(category_data['values'])},
-                    backgroundColor: [
-                        '#0d6efd', '#6610f2', '#6f42c1', '#d63384',
-                        '#dc3545', '#fd7e14', '#ffc107', '#198754',
-                        '#20c997', '#0dcaf0'
-                    ]
+                    backgroundColor: neonColors,
+                    borderColor: '#0a0a0f',
+                    borderWidth: 3,
+                    hoverBorderColor: '#ffffff',
+                    hoverBorderWidth: 2
                 }}]
             }},
             options: {{
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '65%',
                 plugins: {{
                     legend: {{
                         position: 'right',
                         labels: {{
-                            color: getComputedStyle(document.body).getPropertyValue('--text-primary')
+                            color: '#8888aa',
+                            font: {{
+                                family: "'Rajdhani', sans-serif",
+                                size: 12
+                            }},
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded'
                         }}
                     }}
                 }}
             }}
         }});
 
-        // Top Items Bar Chart
+        // Top Items Horizontal Bar Chart
         const topCtx = document.getElementById('topItemsChart').getContext('2d');
         new Chart(topCtx, {{
             type: 'bar',
@@ -383,7 +597,17 @@ class HtmlExporter(Exporter):
                 datasets: [{{
                     label: 'Size (MB)',
                     data: {json.dumps(top_items_data['values'])},
-                    backgroundColor: '#0d6efd'
+                    backgroundColor: function(context) {{
+                        const chart = context.chart;
+                        const {{ctx, chartArea}} = chart;
+                        if (!chartArea) return '#00f5ff';
+                        const gradient = ctx.createLinearGradient(chartArea.left, 0, chartArea.right, 0);
+                        gradient.addColorStop(0, '#00f5ff');
+                        gradient.addColorStop(1, '#bf00ff');
+                        return gradient;
+                    }},
+                    borderRadius: 6,
+                    borderSkipped: false
                 }}]
             }},
             options: {{
@@ -395,13 +619,27 @@ class HtmlExporter(Exporter):
                 }},
                 scales: {{
                     x: {{
+                        grid: {{
+                            color: 'rgba(0, 245, 255, 0.1)',
+                            drawBorder: false
+                        }},
                         ticks: {{
-                            color: getComputedStyle(document.body).getPropertyValue('--text-primary')
+                            color: '#8888aa',
+                            font: {{
+                                family: "'Rajdhani', sans-serif"
+                            }}
                         }}
                     }},
                     y: {{
+                        grid: {{
+                            display: false
+                        }},
                         ticks: {{
-                            color: getComputedStyle(document.body).getPropertyValue('--text-primary')
+                            color: '#00f5ff',
+                            font: {{
+                                family: "'Rajdhani', sans-serif",
+                                weight: 600
+                            }}
                         }}
                     }}
                 }}

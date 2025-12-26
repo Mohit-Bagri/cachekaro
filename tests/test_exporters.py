@@ -123,11 +123,14 @@ class TestHtmlExporter:
         assert "chart.js" in output  # Chart.js library reference
 
     def test_dark_mode(self, sample_scan_result):
-        """Test HTML dark mode."""
+        """Test HTML cyberpunk dark theme."""
         exporter = HtmlExporter(dark_mode=True)
         output = exporter.export(sample_scan_result)
 
-        assert 'data-theme="dark"' in output
+        # Check for cyberpunk neon theme elements
+        assert "--neon-cyan" in output
+        assert "--bg-dark: #0a0a0f" in output
+        assert "Orbitron" in output  # Cyberpunk font
 
 
 class TestExporterFactory:
