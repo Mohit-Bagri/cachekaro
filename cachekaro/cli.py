@@ -442,6 +442,7 @@ def cmd_report(args: argparse.Namespace) -> int:
         output_path = f"cachekaro_report_{timestamp}.{ext}"
 
     # Use no colors for text files
+    exporter: Exporter
     if output_format == "text":
         exporter = TextExporter(use_colors=False)
     else:
