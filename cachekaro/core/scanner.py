@@ -241,21 +241,47 @@ class Scanner:
         items: list[CacheItem] = []
         total = len(cache_paths)
 
-        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            future_to_path = {
-                executor.submit(self.scan_path, cp): cp for cp in cache_paths
-            }
+        try:
+            with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                future_to_path = {
+                    executor.submit(self.scan_path, cp): cp for cp in cache_paths
+                }
 
-            for i, future in enumerate(as_completed(future_to_path)):
-                cache_path = future_to_path[future]
+                for i, future in enumerate(as_completed(future_to_path)):
+                    cache_path = future_to_path[future]
+                    try:
+                        item = future.result()
+                        items.append(item)
+
+                        if self.progress_callback:
+                            try:
+                                self.progress_callback(cache_path.name, i + 1, total)
+                            except Exception:
+                                pass  # Don't let progress callback errors stop scanning
+                    except Exception as e:
+                        # Create error item
+                        error_item = CacheItem(
+                            path=cache_path.path,
+                            name=cache_path.name,
+                            category=cache_path.category,
+                            description=cache_path.description,
+                            exists=False,
+                            is_accessible=False,
+                            error_message=str(e),
+                        )
+                        items.append(error_item)
+        except Exception:
+            # If ThreadPoolExecutor fails, fall back to sequential scanning
+            for i, cache_path in enumerate(cache_paths):
                 try:
-                    item = future.result()
+                    item = self.scan_path(cache_path)
                     items.append(item)
-
                     if self.progress_callback:
-                        self.progress_callback(cache_path.name, i + 1, total)
+                        try:
+                            self.progress_callback(cache_path.name, i + 1, total)
+                        except Exception:
+                            pass
                 except Exception as e:
-                    # Create error item
                     error_item = CacheItem(
                         path=cache_path.path,
                         name=cache_path.name,

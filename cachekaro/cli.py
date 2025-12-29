@@ -16,8 +16,9 @@ from datetime import datetime
 # Initialize colorama for Windows CMD ANSI support
 try:
     import colorama
-    colorama.init()
-except ImportError:
+    colorama.init(autoreset=False, strip=False, convert=True)
+except (ImportError, Exception):
+    # colorama not available or failed to initialize - colors may not work on Windows CMD
     pass
 
 from cachekaro import __version__
@@ -712,37 +713,65 @@ For more information, visit: https://github.com/mohitbagri/cachekaro
 
 def main() -> int:
     """Main entry point."""
-    parser = create_parser()
-    args = parser.parse_args()
-
-    # Handle version flag
-    if args.version:
-        return cmd_version(args)
-
-    # Handle no command
-    if not args.command:
-        # Default to analyze
-        args.command = "analyze"
-        args.format = "text"
-        args.output = None
-        args.category = "all"
-        args.min_size = None
-        args.stale_days = 30
-        args.safe_only = False
-        args.include_empty = False
-        args.no_color = False
-        args.quiet = False
-        return cmd_analyze(args)
-
-    # Run the command
     try:
-        result: int = args.func(args)
-        return result
-    except KeyboardInterrupt:
-        print(f"\n{color('Interrupted.', Colors.YELLOW)}")
-        return 130
+        parser = create_parser()
+        args = parser.parse_args()
+
+        # Handle version flag
+        if args.version:
+            return cmd_version(args)
+
+        # Handle no command
+        if not args.command:
+            # Default to analyze
+            args.command = "analyze"
+            args.format = "text"
+            args.output = None
+            args.category = "all"
+            args.min_size = None
+            args.stale_days = 30
+            args.safe_only = False
+            args.include_empty = False
+            args.no_color = False
+            args.quiet = False
+            return cmd_analyze(args)
+
+        # Run the command
+        try:
+            result: int = args.func(args)
+            return result
+        except KeyboardInterrupt:
+            print(f"\n{color('Interrupted.', Colors.YELLOW)}")
+            return 130
+        except Exception as e:
+            print(f"\n{color('Error:', Colors.RED)} {e}")
+            return 1
+
     except Exception as e:
-        print(f"\n{color('Error:', Colors.RED)} {e}")
+        # Catch-all for any uncaught exceptions to prevent silent crashes
+        import traceback
+        error_msg = f"""
+{'=' * 60}
+CacheKaro encountered an unexpected error:
+{'=' * 60}
+
+{str(e)}
+
+{'=' * 60}
+Debug information:
+{'=' * 60}
+{traceback.format_exc()}
+
+Please report this issue at:
+https://github.com/Mohit-Bagri/cachekaro/issues
+
+Press Enter to exit...
+"""
+        print(error_msg)
+        try:
+            input()  # Wait for user to press Enter before closing
+        except (KeyboardInterrupt, EOFError):
+            pass
         return 1
 
 

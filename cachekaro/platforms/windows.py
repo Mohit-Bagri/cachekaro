@@ -128,7 +128,8 @@ class WindowsPlatform(PlatformBase):
         """Check if running as Administrator."""
         try:
             return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined]
-        except (AttributeError, OSError):
+        except (AttributeError, OSError, Exception):
+            # Catch all exceptions - on some Windows configurations this can fail
             return False
 
     def empty_recycle_bin(self) -> tuple[bool, str]:
@@ -193,60 +194,72 @@ class WindowsPlatform(PlatformBase):
         # ============================================================
         # AUTO-DISCOVER: LocalAppData caches
         # ============================================================
-        if localappdata.exists():
-            # Scan for app folders with cache directories
-            for item in localappdata.iterdir():
-                if not item.is_dir():
-                    continue
-                # Skip system folders
-                if item.name.lower() in ["microsoft", "packages", "programs", "temp"]:
-                    continue
-                # Look for cache subdirectories
-                cache_subfolders = ["Cache", "cache", "Caches", "GPUCache", "Code Cache"]
-                for subfolder in cache_subfolders:
-                    cache_path = item / subfolder
-                    if cache_path.exists() and cache_path.is_dir():
-                        try:
-                            if any(cache_path.iterdir()):
-                                app_name, category = identify_app_from_path(item.name)
-                                paths.append(CachePath(
-                                    path=cache_path,
-                                    name=f"{app_name} Cache",
-                                    category=category,
-                                    description=f"Cache for {app_name}",
-                                    risk_level=RiskLevel.SAFE,
-                                    app_specific=True,
-                                    app_name=app_name,
-                                ))
-                        except PermissionError:
+        try:
+            if localappdata.exists():
+                # Scan for app folders with cache directories
+                for item in localappdata.iterdir():
+                    try:
+                        if not item.is_dir():
                             continue
+                        # Skip system folders
+                        if item.name.lower() in ["microsoft", "packages", "programs", "temp"]:
+                            continue
+                        # Look for cache subdirectories
+                        cache_subfolders = ["Cache", "cache", "Caches", "GPUCache", "Code Cache"]
+                        for subfolder in cache_subfolders:
+                            cache_path = item / subfolder
+                            try:
+                                if cache_path.exists() and cache_path.is_dir():
+                                    if any(cache_path.iterdir()):
+                                        app_name, category = identify_app_from_path(item.name)
+                                        paths.append(CachePath(
+                                            path=cache_path,
+                                            name=f"{app_name} Cache",
+                                            category=category,
+                                            description=f"Cache for {app_name}",
+                                            risk_level=RiskLevel.SAFE,
+                                            app_specific=True,
+                                            app_name=app_name,
+                                        ))
+                            except (PermissionError, OSError):
+                                continue
+                    except (PermissionError, OSError):
+                        continue
+        except (PermissionError, OSError):
+            pass
 
         # ============================================================
         # AUTO-DISCOVER: AppData (Roaming) caches
         # ============================================================
-        if appdata.exists():
-            for item in appdata.iterdir():
-                if not item.is_dir():
-                    continue
-                # Look for cache subdirectories
-                cache_subfolders = ["Cache", "cache", "Caches", "Code Cache", "Storage"]
-                for subfolder in cache_subfolders:
-                    cache_path = item / subfolder
-                    if cache_path.exists() and cache_path.is_dir():
-                        try:
-                            if any(cache_path.iterdir()):
-                                app_name, category = identify_app_from_path(item.name)
-                                paths.append(CachePath(
-                                    path=cache_path,
-                                    name=f"{app_name} Cache",
-                                    category=category,
-                                    description=f"Cache for {app_name}",
-                                    risk_level=RiskLevel.SAFE,
-                                    app_specific=True,
-                                    app_name=app_name,
-                                ))
-                        except PermissionError:
+        try:
+            if appdata.exists():
+                for item in appdata.iterdir():
+                    try:
+                        if not item.is_dir():
                             continue
+                        # Look for cache subdirectories
+                        cache_subfolders = ["Cache", "cache", "Caches", "Code Cache", "Storage"]
+                        for subfolder in cache_subfolders:
+                            cache_path = item / subfolder
+                            try:
+                                if cache_path.exists() and cache_path.is_dir():
+                                    if any(cache_path.iterdir()):
+                                        app_name, category = identify_app_from_path(item.name)
+                                        paths.append(CachePath(
+                                            path=cache_path,
+                                            name=f"{app_name} Cache",
+                                            category=category,
+                                            description=f"Cache for {app_name}",
+                                            risk_level=RiskLevel.SAFE,
+                                            app_specific=True,
+                                            app_name=app_name,
+                                        ))
+                            except (PermissionError, OSError):
+                                continue
+                    except (PermissionError, OSError):
+                        continue
+        except (PermissionError, OSError):
+            pass
 
         # ============================================================
         # SPECIFIC: Browser caches (nested paths)
@@ -545,22 +558,28 @@ class WindowsPlatform(PlatformBase):
 
         # Xbox / Microsoft Store games
         xbox_cache = localappdata / "Packages"
-        if xbox_cache.exists():
-            # Look for Xbox-related packages
-            for item in xbox_cache.iterdir():
-                if item.is_dir() and "xbox" in item.name.lower():
-                    temp_state = item / "TempState"
-                    if temp_state.exists():
-                        paths.append(CachePath(
-                            path=temp_state,
-                            name="Xbox App Cache",
-                            category=Category.GAME,
-                            description="Xbox app temporary data",
-                            risk_level=RiskLevel.SAFE,
-                            app_specific=True,
-                            app_name="Xbox",
-                        ))
-                        break
+        try:
+            if xbox_cache.exists():
+                # Look for Xbox-related packages
+                for item in xbox_cache.iterdir():
+                    try:
+                        if item.is_dir() and "xbox" in item.name.lower():
+                            temp_state = item / "TempState"
+                            if temp_state.exists():
+                                paths.append(CachePath(
+                                    path=temp_state,
+                                    name="Xbox App Cache",
+                                    category=Category.GAME,
+                                    description="Xbox app temporary data",
+                                    risk_level=RiskLevel.SAFE,
+                                    app_specific=True,
+                                    app_name="Xbox",
+                                ))
+                                break
+                    except (PermissionError, OSError):
+                        continue
+        except (PermissionError, OSError):
+            pass
 
         # NVIDIA shader cache
         nvidia_cache = localappdata / "NVIDIA" / "DXCache"
