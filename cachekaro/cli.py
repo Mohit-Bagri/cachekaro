@@ -16,7 +16,6 @@ from datetime import datetime
 # Initialize colorama for Windows CMD ANSI support
 try:
     import colorama
-    import sys
     # Only use convert on Windows, not on macOS/Linux where ANSI works natively
     if sys.platform == "win32":
         colorama.init(autoreset=False, strip=False, convert=True)
