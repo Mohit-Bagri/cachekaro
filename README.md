@@ -11,6 +11,8 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-platform-support)
 [![Tests](https://img.shields.io/badge/tests-53%20passing-brightgreen.svg)](#-development)
 
+⭐ **If you find CacheKaro useful, please consider giving it a star!** ⭐
+
 [Overview](#-overview) · [Installation](#-installation) · [Uninstall](#-uninstall) · [Quick Start](#-quick-start) · [Commands](#-commands) · [Detection](#-what-it-detects) · [Safety](#-safety--risk-levels) · [Export Formats](#-export-formats) · [Config](#-configuration) · [Development](#-development) · [Platform Support](#-platform-support) · [License](#-license)
 
 </div>
@@ -349,5 +351,7 @@ MIT License — see [LICENSE](LICENSE)
 Made in 🇮🇳 with ❤️ by [MOHIT BAGRI](https://github.com/Mohit-Bagri)
 
 **CacheKaro** - *Clean It Up!*
+
+⭐ **Star this repo if you found it helpful!** ⭐
 
 </div>
