@@ -75,6 +75,25 @@ cachekaro --version
 
 > **Note:** If installed from source, the `cachekaro` command only works when the virtual environment is activated. Always run `source venv/bin/activate` before using CacheKaro.
 
+### • 🚀 Getting Started (Run These After Install!)
+
+```bash
+# See what's taking up space
+cachekaro analyze
+
+# View system info
+cachekaro info
+
+# Generate a detailed HTML report
+cachekaro report
+
+# Clean caches safely (interactive)
+cachekaro clean
+
+# Get help
+cachekaro --help
+```
+
 ---
 
 ## ▸ Uninstall

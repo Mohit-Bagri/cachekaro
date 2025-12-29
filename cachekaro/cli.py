@@ -539,17 +539,21 @@ def create_parser() -> argparse.ArgumentParser:
         description="CacheKaro - Cross-Platform Storage & Cache Manager",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  cachekaro analyze                  # Analyze storage usage
+Quick Start:
+  cachekaro                          # Run analysis (default)
+  cachekaro analyze                  # See what's taking up space
+  cachekaro info                     # View system information
+  cachekaro report                   # Generate HTML report
+  cachekaro clean                    # Clean caches (interactive)
+  cachekaro clean --dry-run          # Preview without deleting
+
+More Examples:
   cachekaro analyze --format json    # Output as JSON
   cachekaro analyze --category dev   # Only development caches
-  cachekaro clean                    # Interactive cleaning
-  cachekaro clean --dry-run          # Preview what would be cleaned
   cachekaro clean --auto             # Clean all without prompts
-  cachekaro report                   # Generate HTML report
   cachekaro report --format csv      # Generate CSV report
 
-For more information, visit: https://github.com/mohitbagri/cachekaro
+For more info: https://github.com/Mohit-Bagri/cachekaro
         """,
     )
 
