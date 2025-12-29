@@ -59,6 +59,15 @@ class JsonExporter(Exporter):
                 item.pop("largest_files", None)
                 item.pop("file_types", None)
 
+        # Add attribution
+        data["generated_by"] = {
+            "tool": "CacheKaro",
+            "author": "MOHIT BAGRI",
+            "country": "India",
+            "github": "https://github.com/Mohit-Bagri/cachekaro",
+            "message": "Star on GitHub if you found this useful!"
+        }
+
         return json.dumps(data, cls=DateTimeEncoder, indent=self.indent)
 
     def export_compact(self, result: ScanResult) -> str:

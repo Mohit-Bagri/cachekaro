@@ -114,6 +114,7 @@ def print_banner(check_update: bool = True) -> None:
         if available and latest:
             update_line = f"\n    {Colors.YELLOW}{Colors.BOLD}⚡ Update available: v{latest}{Colors.RESET} {Colors.GRAY}→ pip install --upgrade cachekaro{Colors.RESET}"
 
+    github_url = "https://github.com/Mohit-Bagri/cachekaro"
     banner = f"""
 {Colors.PURPLE}{Colors.BOLD}░█████╗░░█████╗░░█████╗░██╗░░██╗███████╗██╗░░██╗░█████╗░██████╗░░█████╗░
 ██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔════╝██║░██╔╝██╔══██╗██╔══██╗██╔══██╗
@@ -124,7 +125,8 @@ def print_banner(check_update: bool = True) -> None:
 
     {Colors.WHITE}{Colors.BOLD}Cross-Platform Storage & Cache Manager{Colors.RESET}
     {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}
-    {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}{update_line}
+    {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}
+    {Colors.YELLOW}★{Colors.RESET} {Colors.GRAY}Star on GitHub:{Colors.RESET} {Colors.CYAN}{github_url}{Colors.RESET}{update_line}
 """
     print(banner)
 
