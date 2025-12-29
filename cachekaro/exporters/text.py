@@ -166,9 +166,12 @@ class TextExporter(Exporter):
         lines.append(self._color("Run 'cachekaro clean' to start cleaning".center(self.width), "cyan"))
         lines.append(self._color("=" * self.width, "cyan"))
         lines.append("")
-        lines.append("Made in India with ♥ by MOHIT BAGRI")
-        lines.append("★ Star on GitHub: https://github.com/Mohit-Bagri/cachekaro")
-        lines.append("")
+
+        # Add attribution only for file exports (no colors = file output)
+        if not self.use_colors:
+            lines.append("Made in India with ♥ by MOHIT BAGRI")
+            lines.append("★ Star on GitHub: https://github.com/Mohit-Bagri/cachekaro")
+            lines.append("")
 
         return "\n".join(lines)
 
