@@ -461,7 +461,15 @@ def cmd_report(args: argparse.Namespace) -> int:
 
     # Export
     final_path = exporter.export_to_file(result, output_path)
-    print(f"\n{color('Report saved to:', Colors.WHITE)} {Colors.PURPLE}{final_path}{Colors.RESET}")
+
+    # Get absolute path and directory
+    import os
+    abs_path = os.path.abspath(final_path)
+    file_dir = os.path.dirname(abs_path)
+    file_name = os.path.basename(abs_path)
+
+    print(f"\n{color('Report saved:', Colors.GREEN)} {Colors.WHITE}{file_name}{Colors.RESET}")
+    print(f"{color('Location:', Colors.GRAY)} {Colors.CYAN}{file_dir}{Colors.RESET}")
 
     return 0
 
