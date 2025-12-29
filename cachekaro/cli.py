@@ -16,7 +16,12 @@ from datetime import datetime
 # Initialize colorama for Windows CMD ANSI support
 try:
     import colorama
-    colorama.init(autoreset=False, strip=False, convert=True)
+    import sys
+    # Only use convert on Windows, not on macOS/Linux where ANSI works natively
+    if sys.platform == "win32":
+        colorama.init(autoreset=False, strip=False, convert=True)
+    else:
+        colorama.init(autoreset=False, strip=False, convert=False)
 except (ImportError, Exception):
     # colorama not available or failed to initialize - colors may not work on Windows CMD
     pass
