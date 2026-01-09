@@ -64,7 +64,7 @@ class HtmlExporter(Exporter):
         category_data = self._prepare_category_data(result)
         top_items_data = self._prepare_top_items_data(result)
 
-        # Build HTML with minimalist purple theme
+        # Build HTML with pixelated Minecraft-style theme
         html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,38 +73,46 @@ class HtmlExporter(Exporter):
     <title>{html.escape(self.title)}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
         :root {{
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: #16162a;
-            --bg-card-hover: #1e1e3a;
-            --purple-primary: #7c3aed;
-            --purple-light: #a78bfa;
-            --purple-dark: #5b21b6;
-            --purple-muted: #4c1d95;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border-color: #2d2d4a;
-            --success: #22c55e;
-            --warning: #eab308;
-            --danger: #ef4444;
+            --bg-primary: #1a0a2e;
+            --bg-secondary: #2d1b4e;
+            --bg-card: #251442;
+            --bg-card-hover: #3d2266;
+            --purple-primary: #9d4edd;
+            --purple-light: #c77dff;
+            --purple-dark: #7b2cbf;
+            --purple-glow: #e0aaff;
+            --text-primary: #f0e6ff;
+            --text-secondary: #b8a9c9;
+            --text-muted: #7c6f8a;
+            --border-light: #5a3d7a;
+            --border-dark: #0d0515;
+            --success: #39ff14;
+            --warning: #ffff00;
+            --danger: #ff3131;
+            --pixel-size: 4px;
         }}
 
         * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            image-rendering: pixelated;
         }}
 
         body {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'VT323', monospace;
             background-color: var(--bg-primary);
+            background-image:
+                linear-gradient(rgba(157, 78, 221, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 78, 221, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.4;
             min-height: 100vh;
+            font-size: 18px;
         }}
 
         .container {{
@@ -113,51 +121,92 @@ class HtmlExporter(Exporter):
             padding: 40px 24px;
         }}
 
+        /* Pixel Block Effect */
+        .pixel-block {{
+            background: var(--bg-card);
+            border: var(--pixel-size) solid;
+            border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+            box-shadow:
+                inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 rgba(0, 0, 0, 0.3),
+                inset var(--pixel-size) var(--pixel-size) 0 rgba(255, 255, 255, 0.1),
+                0 var(--pixel-size) 0 var(--border-dark),
+                var(--pixel-size) 0 0 var(--border-dark),
+                var(--pixel-size) var(--pixel-size) 0 var(--border-dark);
+        }}
+
+        .pixel-block:hover {{
+            background: var(--bg-card-hover);
+            box-shadow:
+                inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 rgba(0, 0, 0, 0.3),
+                inset var(--pixel-size) var(--pixel-size) 0 rgba(255, 255, 255, 0.15),
+                0 var(--pixel-size) 0 var(--border-dark),
+                var(--pixel-size) 0 0 var(--border-dark),
+                var(--pixel-size) var(--pixel-size) 0 var(--border-dark),
+                0 0 20px rgba(199, 125, 255, 0.3);
+        }}
+
         /* Header */
         header {{
             text-align: center;
-            margin-bottom: 48px;
-            padding: 48px 24px;
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }}
-
-        header:hover {{
-            border-color: var(--purple-primary);
-            box-shadow: 0 0 30px rgba(124, 58, 237, 0.15);
+            margin-bottom: 32px;
+            padding: 32px 24px;
         }}
 
         .logo {{
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2rem;
             color: var(--purple-light);
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-            animation: subtle-glow 3s ease-in-out infinite;
+            text-shadow:
+                4px 4px 0 var(--purple-dark),
+                8px 8px 0 var(--border-dark),
+                0 0 20px var(--purple-glow);
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+            animation: pixel-glow 2s ease-in-out infinite alternate;
         }}
 
-        .logo:hover {{
-            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
-        }}
-
-        @keyframes subtle-glow {{
-            0%, 100% {{ text-shadow: 0 0 10px rgba(167, 139, 250, 0.2); }}
-            50% {{ text-shadow: 0 0 20px rgba(167, 139, 250, 0.4); }}
+        @keyframes pixel-glow {{
+            0% {{ text-shadow: 4px 4px 0 var(--purple-dark), 8px 8px 0 var(--border-dark), 0 0 10px var(--purple-glow); }}
+            100% {{ text-shadow: 4px 4px 0 var(--purple-dark), 8px 8px 0 var(--border-dark), 0 0 30px var(--purple-glow), 0 0 60px var(--purple-primary); }}
         }}
 
         .tagline {{
-            font-size: 1rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
             color: var(--text-secondary);
-            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
         }}
 
         .timestamp {{
             margin-top: 16px;
-            font-size: 0.875rem;
+            font-size: 1rem;
             color: var(--text-muted);
+        }}
+
+        /* Decorative pixels */
+        .pixel-decoration {{
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0;
+        }}
+
+        .pixel-dot {{
+            width: 8px;
+            height: 8px;
+            background: var(--purple-primary);
+            animation: pixel-blink 1s ease-in-out infinite;
+        }}
+
+        .pixel-dot:nth-child(2) {{ animation-delay: 0.2s; background: var(--purple-light); }}
+        .pixel-dot:nth-child(3) {{ animation-delay: 0.4s; }}
+        .pixel-dot:nth-child(4) {{ animation-delay: 0.6s; background: var(--purple-light); }}
+        .pixel-dot:nth-child(5) {{ animation-delay: 0.8s; }}
+
+        @keyframes pixel-blink {{
+            0%, 100% {{ opacity: 1; transform: scale(1); }}
+            50% {{ opacity: 0.5; transform: scale(0.8); }}
         }}
 
         /* Grid Layout */
@@ -169,76 +218,68 @@ class HtmlExporter(Exporter):
         }}
 
         @media (max-width: 768px) {{
-            .grid {{
-                grid-template-columns: 1fr;
-            }}
+            .grid {{ grid-template-columns: 1fr; }}
+            .logo {{ font-size: 1.2rem; }}
+            .tagline {{ font-size: 0.5rem; }}
         }}
 
         /* Cards */
         .card {{
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
-        }}
-
-        .card:hover {{
-            border-color: var(--purple-primary);
-            background: var(--bg-card-hover);
+            padding: 20px;
         }}
 
         .card-title {{
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.55rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
+            letter-spacing: 1px;
+            color: var(--purple-light);
             margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed var(--border-light);
         }}
 
         /* Stats */
         .stats-grid {{
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 12px;
         }}
 
         .stat {{
             text-align: center;
-            padding: 16px;
+            padding: 16px 8px;
             background: var(--bg-secondary);
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border: 2px solid var(--border-light);
+            border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
         }}
 
         .stat:hover {{
             background: var(--bg-card-hover);
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
-        }}
-
-        .stat:hover .stat-value {{
-            text-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
+            box-shadow: 0 0 15px rgba(199, 125, 255, 0.4);
         }}
 
         .stat-value {{
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
             color: var(--purple-light);
-            margin-bottom: 4px;
-            transition: text-shadow 0.3s ease;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 0 var(--border-dark);
         }}
 
         .stat-value.highlight {{
             color: var(--success);
+            text-shadow: 0 0 10px var(--success), 2px 2px 0 #0a3d00;
         }}
 
         .stat-value.warning {{
             color: var(--warning);
+            text-shadow: 0 0 10px var(--warning), 2px 2px 0 #4a4a00;
         }}
 
         .stat-label {{
-            font-size: 0.75rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.4rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -248,6 +289,7 @@ class HtmlExporter(Exporter):
         .chart-container {{
             position: relative;
             height: 280px;
+            padding: 8px;
         }}
 
         /* Full width card */
@@ -262,42 +304,51 @@ class HtmlExporter(Exporter):
 
         table {{
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }}
 
         th, td {{
-            padding: 12px 16px;
+            padding: 12px 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--border-dark);
         }}
 
         th {{
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.45rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-muted);
+            color: var(--purple-light);
+            background: var(--bg-secondary);
             cursor: pointer;
             user-select: none;
-            transition: color 0.2s ease;
+            border-bottom: 3px solid var(--purple-primary);
         }}
 
         th:hover {{
-            color: var(--purple-light);
+            color: var(--purple-glow);
+            text-shadow: 0 0 10px var(--purple-glow);
+        }}
+
+        tr {{
+            transition: all 0.1s ease;
         }}
 
         tr:hover {{
             background: var(--bg-secondary);
+            box-shadow: inset 4px 0 0 var(--purple-primary);
         }}
 
         td {{
-            font-size: 0.875rem;
+            font-size: 1rem;
         }}
 
         /* Size colors */
         .size-large {{
             color: var(--purple-light);
-            font-weight: 600;
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--purple-glow);
         }}
 
         .size-medium {{
@@ -308,30 +359,34 @@ class HtmlExporter(Exporter):
             color: var(--text-secondary);
         }}
 
-        /* Risk badges */
+        /* Risk badges - Pixel style */
         .badge {{
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            padding: 4px 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.4rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            border: 2px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.5) rgba(0,0,0,0.5) rgba(255,255,255,0.3);
         }}
 
         .badge-safe {{
-            background: rgba(34, 197, 94, 0.15);
+            background: #0a3d00;
             color: var(--success);
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
         }}
 
         .badge-moderate {{
-            background: rgba(234, 179, 8, 0.15);
+            background: #4a4a00;
             color: var(--warning);
+            box-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
         }}
 
         .badge-caution {{
-            background: rgba(239, 68, 68, 0.15);
+            background: #4a0000;
             color: var(--danger);
+            box-shadow: 0 0 8px rgba(255, 49, 49, 0.3);
         }}
 
         /* Search box */
@@ -339,18 +394,18 @@ class HtmlExporter(Exporter):
             width: 100%;
             padding: 12px 16px;
             margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border: 3px solid;
+            border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
             background: var(--bg-secondary);
             color: var(--text-primary);
-            font-size: 0.875rem;
-            font-family: inherit;
-            transition: all 0.2s ease;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
         }}
 
         .search-box:focus {{
             outline: none;
             border-color: var(--purple-primary);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
         }}
 
         .search-box::placeholder {{
@@ -362,8 +417,12 @@ class HtmlExporter(Exporter):
             text-align: center;
             margin-top: 48px;
             padding: 24px;
+        }}
+
+        footer p {{
+            font-size: 1rem;
             color: var(--text-muted);
-            font-size: 0.875rem;
+            margin: 8px 0;
         }}
 
         footer a {{
@@ -372,44 +431,91 @@ class HtmlExporter(Exporter):
         }}
 
         footer a:hover {{
-            text-decoration: underline;
+            color: var(--purple-glow);
+            text-shadow: 0 0 10px var(--purple-glow);
         }}
 
-        /* Scrollbar */
+        .footer-pixel {{
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.5rem;
+            color: var(--purple-primary);
+        }}
+
+        /* Pixel Scrollbar */
         ::-webkit-scrollbar {{
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
         }}
 
         ::-webkit-scrollbar-track {{
             background: var(--bg-primary);
+            border: 2px solid var(--border-dark);
         }}
 
         ::-webkit-scrollbar-thumb {{
-            background: var(--border-color);
-            border-radius: 4px;
+            background: var(--purple-dark);
+            border: 2px solid;
+            border-color: var(--purple-light) var(--border-dark) var(--border-dark) var(--purple-light);
         }}
 
         ::-webkit-scrollbar-thumb:hover {{
             background: var(--purple-primary);
         }}
+
+        /* Corner decorations */
+        .corner-decoration {{
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            opacity: 0.3;
+        }}
+
+        .corner-tl {{ top: 20px; left: 20px; border-top: 4px solid var(--purple-primary); border-left: 4px solid var(--purple-primary); }}
+        .corner-tr {{ top: 20px; right: 20px; border-top: 4px solid var(--purple-primary); border-right: 4px solid var(--purple-primary); }}
+        .corner-bl {{ bottom: 20px; left: 20px; border-bottom: 4px solid var(--purple-primary); border-left: 4px solid var(--purple-primary); }}
+        .corner-br {{ bottom: 20px; right: 20px; border-bottom: 4px solid var(--purple-primary); border-right: 4px solid var(--purple-primary); }}
+
+        /* Pixel Heart */
+        .pixel-heart {{
+            color: #ff3131;
+            font-size: 1rem;
+            margin: 0 4px;
+            animation: heart-beat 1s ease-in-out infinite;
+        }}
+
+        @keyframes heart-beat {{
+            0%, 100% {{ transform: scale(1); }}
+            50% {{ transform: scale(1.15); }}
+        }}
     </style>
 </head>
 <body>
+    <div class="corner-decoration corner-tl"></div>
+    <div class="corner-decoration corner-tr"></div>
+    <div class="corner-decoration corner-bl"></div>
+    <div class="corner-decoration corner-br"></div>
+
     <div class="container">
-        <header>
-            <div class="logo">CacheKaro</div>
-            <p class="tagline">Storage & Cache Analysis Report</p>
+        <header class="pixel-block">
+            <div class="logo">CACHEKARO</div>
+            <p class="tagline">STORAGE & CACHE ANALYSIS</p>
+            <div class="pixel-decoration">
+                <div class="pixel-dot"></div>
+                <div class="pixel-dot"></div>
+                <div class="pixel-dot"></div>
+                <div class="pixel-dot"></div>
+                <div class="pixel-dot"></div>
+            </div>
             <p class="timestamp">Generated on {datetime.now().strftime('%B %d, %Y at %H:%M')}</p>
         </header>
 
         <div class="grid">
-            <div class="card">
-                <h2 class="card-title">Disk Overview</h2>
+            <div class="card pixel-block">
+                <h2 class="card-title">[ DISK OVERVIEW ]</h2>
                 <div class="stats-grid">
                     <div class="stat">
                         <div class="stat-value">{result.formatted_disk_total}</div>
-                        <div class="stat-label">Total Space</div>
+                        <div class="stat-label">Total</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value warning">{result.formatted_disk_used}</div>
@@ -426,16 +532,16 @@ class HtmlExporter(Exporter):
                 </div>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Cache Summary</h2>
+            <div class="card pixel-block">
+                <h2 class="card-title">[ CACHE SUMMARY ]</h2>
                 <div class="stats-grid">
                     <div class="stat">
                         <div class="stat-value">{result.formatted_total_size}</div>
-                        <div class="stat-label">Total Cache</div>
+                        <div class="stat-label">Total</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value highlight">{result.formatted_cleanable_size}</div>
-                        <div class="stat-label">Cleanable</div>
+                        <div class="stat-label">Clean</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">{result.total_files:,}</div>
@@ -443,28 +549,28 @@ class HtmlExporter(Exporter):
                     </div>
                     <div class="stat">
                         <div class="stat-value">{len(result.items)}</div>
-                        <div class="stat-label">Locations</div>
+                        <div class="stat-label">Paths</div>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Space by Category</h2>
+            <div class="card pixel-block">
+                <h2 class="card-title">[ SPACE BY CATEGORY ]</h2>
                 <div class="chart-container">
                     <canvas id="categoryChart"></canvas>
                 </div>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Top Consumers</h2>
+            <div class="card pixel-block">
+                <h2 class="card-title">[ TOP CONSUMERS ]</h2>
                 <div class="chart-container">
                     <canvas id="topItemsChart"></canvas>
                 </div>
             </div>
 
-            <div class="card card-full">
-                <h2 class="card-title">All Cache Locations</h2>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search cache locations...">
+            <div class="card card-full pixel-block">
+                <h2 class="card-title">[ ALL CACHE LOCATIONS ]</h2>
+                <input type="text" class="search-box" id="searchBox" placeholder="> Search cache locations...">
                 <div class="table-wrapper">
                     <table id="cacheTable">
                         <thead>
@@ -485,22 +591,23 @@ class HtmlExporter(Exporter):
             </div>
         </div>
 
-        <footer>
-            <p>Generated by <a href="{_d(_attr['r'])}"><strong>CacheKaro</strong></a> &middot; <em>Clean It Up!</em></p>
-            <p style="margin-top: 12px;">Made in 🇮🇳 with ❤️ by <a href="{_d(_attr['u'])}">{_d(_attr['n'])}</a></p>
-            <p style="margin-top: 12px;">⭐ <a href="{_d(_attr['r'])}">Star on GitHub</a> if you found this useful!</p>
+        <footer class="pixel-block">
+            <p class="footer-pixel">- GENERATED BY -</p>
+            <p><a href="{_d(_attr['r'])}"><strong>CACHEKARO</strong></a> - Clean It Up!</p>
+            <p style="margin-top: 16px;">Made in India with <span class="pixel-heart">❤</span> by <a href="{_d(_attr['u'])}">{_d(_attr['n'])}</a></p>
+            <p style="margin-top: 12px;">Star on <a href="{_d(_attr['r'])}">GitHub</a> if you found this useful!</p>
         </footer>
     </div>
 
     <script>
-        // Color palette
+        // Pixel color palette (purple theme)
         const colors = [
-            '#7c3aed', '#a78bfa', '#c4b5fd', '#8b5cf6',
-            '#6366f1', '#818cf8', '#60a5fa', '#38bdf8',
-            '#22c55e', '#eab308'
+            '#9d4edd', '#c77dff', '#e0aaff', '#7b2cbf',
+            '#5a189a', '#3c096c', '#240046', '#10002b',
+            '#39ff14', '#ffff00'
         ];
 
-        // Category Doughnut Chart
+        // Category Doughnut Chart - Pixel style
         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
         new Chart(categoryCtx, {{
             type: 'doughnut',
@@ -509,34 +616,34 @@ class HtmlExporter(Exporter):
                 datasets: [{{
                     data: {json.dumps(category_data['values'])},
                     backgroundColor: colors,
-                    borderColor: '#0f0f1a',
-                    borderWidth: 2,
+                    borderColor: '#1a0a2e',
+                    borderWidth: 3,
                     hoverBorderWidth: 0
                 }}]
             }},
             options: {{
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '70%',
+                cutout: '60%',
                 plugins: {{
                     legend: {{
                         position: 'right',
                         labels: {{
-                            color: '#94a3b8',
+                            color: '#b8a9c9',
                             font: {{
-                                family: "'Inter', sans-serif",
-                                size: 11
+                                family: "'VT323', monospace",
+                                size: 14
                             }},
-                            padding: 12,
+                            padding: 10,
                             usePointStyle: true,
-                            pointStyle: 'circle'
+                            pointStyle: 'rect'
                         }}
                     }}
                 }}
             }}
         }});
 
-        // Top Items Bar Chart
+        // Top Items Bar Chart - Pixel style
         const topCtx = document.getElementById('topItemsChart').getContext('2d');
         new Chart(topCtx, {{
             type: 'bar',
@@ -544,8 +651,10 @@ class HtmlExporter(Exporter):
                 labels: {json.dumps(top_items_data['labels'])},
                 datasets: [{{
                     data: {json.dumps(top_items_data['values'])},
-                    backgroundColor: '#7c3aed',
-                    borderRadius: 4,
+                    backgroundColor: '#9d4edd',
+                    borderColor: '#c77dff',
+                    borderWidth: 2,
+                    borderRadius: 0,
                     borderSkipped: false
                 }}]
             }},
@@ -559,14 +668,14 @@ class HtmlExporter(Exporter):
                 scales: {{
                     x: {{
                         grid: {{
-                            color: '#2d2d4a',
-                            drawBorder: false
+                            color: '#3d2266',
+                            lineWidth: 1
                         }},
                         ticks: {{
-                            color: '#64748b',
+                            color: '#7c6f8a',
                             font: {{
-                                family: "'Inter', sans-serif",
-                                size: 11
+                                family: "'VT323', monospace",
+                                size: 14
                             }}
                         }}
                     }},
@@ -575,10 +684,10 @@ class HtmlExporter(Exporter):
                             display: false
                         }},
                         ticks: {{
-                            color: '#94a3b8',
+                            color: '#b8a9c9',
                             font: {{
-                                family: "'Inter', sans-serif",
-                                size: 11
+                                family: "'VT323', monospace",
+                                size: 14
                             }}
                         }}
                     }}

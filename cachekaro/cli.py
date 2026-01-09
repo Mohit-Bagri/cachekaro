@@ -13,17 +13,34 @@ import sys
 import urllib.request
 from datetime import datetime
 
-# Initialize colorama for Windows CMD ANSI support
-try:
-    import colorama
-    # Only use convert on Windows, not on macOS/Linux where ANSI works natively
-    if sys.platform == "win32":
+# Initialize colors for Windows
+if sys.platform == "win32":
+    # Try to enable Windows Virtual Terminal Processing (Windows 10+)
+    try:
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+        # Enable ANSI escape sequences in Windows console
+        # STD_OUTPUT_HANDLE = -11, ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
+        handle = kernel32.GetStdHandle(-11)
+        mode = ctypes.c_ulong()
+        kernel32.GetConsoleMode(handle, ctypes.byref(mode))
+        kernel32.SetConsoleMode(handle, mode.value | 0x0004)
+    except Exception:
+        pass
+
+    # Also initialize colorama as fallback for older Windows
+    try:
+        import colorama
         colorama.init(autoreset=False, strip=False, convert=True)
-    else:
+    except (ImportError, Exception):
+        pass
+else:
+    # macOS/Linux - ANSI works natively, just init colorama without conversion
+    try:
+        import colorama
         colorama.init(autoreset=False, strip=False, convert=False)
-except (ImportError, Exception):
-    # colorama not available or failed to initialize - colors may not work on Windows CMD
-    pass
+    except (ImportError, Exception):
+        pass
 
 from cachekaro import __version__
 from cachekaro.core.analyzer import Analyzer
@@ -131,6 +148,9 @@ def print_banner(check_update: bool = True) -> None:
     {Colors.GRAY}Version {__version__} | {Colors.VIOLET}Clean It Up!{Colors.RESET}
     {Colors.GRAY}Made in{Colors.RESET} {Colors.WHITE}{Colors.BOLD}{_country}{Colors.RESET} {Colors.GRAY}with{Colors.RESET} {Colors.RED}♥{Colors.RESET}  {Colors.GRAY}by{Colors.RESET} {Colors.PURPLE}{Colors.BOLD}{_author}{Colors.RESET}
     {Colors.YELLOW}★{Colors.RESET} {Colors.GRAY}Star on GitHub:{Colors.RESET} {Colors.CYAN}{github_url}{Colors.RESET}{update_line}
+
+    {Colors.GRAY}─────────────────────────────────────────────────────{Colors.RESET}
+    {Colors.GRAY}Use{Colors.RESET} {Colors.PURPLE}cachekaro --help{Colors.RESET} {Colors.GRAY}for all available commands{Colors.RESET}
 """
     print(banner)
 
@@ -183,10 +203,10 @@ def confirm_clean(item: CacheItem) -> bool:
 
     try:
         response = input(f"\n{color('Delete?', Colors.YELLOW)} [y/N/q(uit)]: ").strip().lower()
-        if response == "q":
+        if response in ("q", "quit"):
             print(f"\n{color('Cleaning cancelled.', Colors.YELLOW)}")
             sys.exit(0)
-        return response == "y"
+        return response in ("y", "yes")
     except (KeyboardInterrupt, EOFError):
         print(f"\n{color('Cleaning cancelled.', Colors.YELLOW)}")
         sys.exit(0)
@@ -327,7 +347,7 @@ def cmd_clean(args: argparse.Namespace) -> int:
         print(f"{color('Mode:', Colors.WHITE)} {Colors.RED}Auto{Colors.RESET} {Colors.GRAY}(all items will be cleaned without confirmation){Colors.RESET}")
         try:
             response = input(f"\n{color('Are you sure?', Colors.RED)} [y/N]: ").strip().lower()
-            if response != "y":
+            if response not in ("y", "yes"):
                 print("Cancelled.")
                 return 0
         except (KeyboardInterrupt, EOFError):
