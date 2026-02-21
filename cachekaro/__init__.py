@@ -5,7 +5,7 @@ A production-ready tool to analyze and clean cache/storage on macOS, Linux, and 
 Cache Karo! (Hindi-English: "Clean It Up!")
 """
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 __author__ = "MOHIT BAGRI"
 __license__ = "MIT"
 
