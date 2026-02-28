@@ -6,12 +6,6 @@
 
 **CacheKaro** - *Clean It Up!*
 
-<p align="center">
-  <a href="https://aether-news-trends-vpt4.onrender.com" target="_blank">
-    <img src="https://img.shields.io/badge/🔗_Live_Demo-aether--news--trends--vpt4.onrender.com-4A90E2?style=for-the-badge&logo=render&logoColor=white" alt="Live Demo" />
-  </a>
-</p>
-
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-platform-support)
