@@ -72,10 +72,10 @@ pip install -e .
 ### • Upgrade CacheKaro
 
 ```bash
-pip install --no-cache-dir --upgrade cachekaro
+pip install --force-reinstall cachekaro
 ```
 
-> **Tip:** Use `--no-cache-dir` to ensure you get the latest version from PyPI, bypassing any local pip cache.
+> **Tip:** Use `--force-reinstall` to ensure you always get the latest version, even if pip thinks the current version is "sufficient".
 
 ### • Verify Installation
 
