@@ -133,7 +133,7 @@ def print_banner(check_update: bool = True) -> None:
     if check_update:
         available, latest = is_update_available()
         if available and latest:
-            update_line = f"\n    {Colors.YELLOW}{Colors.BOLD}⚡ Update available: v{latest}{Colors.RESET} {Colors.GRAY}→ pip install --upgrade cachekaro{Colors.RESET}"
+            update_line = f"\n    {Colors.YELLOW}{Colors.BOLD}⚡ Update available: v{latest}{Colors.RESET} {Colors.GRAY}→ pip install --no-cache-dir --upgrade cachekaro{Colors.RESET}"
 
     github_url = "https://github.com/Mohit-Bagri/cachekaro"
     banner = f"""
@@ -501,7 +501,7 @@ def cmd_version(args: argparse.Namespace) -> int:
     # Check for updates
     available, latest = is_update_available()
     if available and latest:
-        print(f"\n{Colors.YELLOW}⚡ Update available: v{latest}{Colors.RESET} → pip install --upgrade cachekaro")
+        print(f"\n{Colors.YELLOW}⚡ Update available: v{latest}{Colors.RESET} → pip install --no-cache-dir --upgrade cachekaro")
 
     return 0
 
@@ -559,7 +559,7 @@ def cmd_update(args: argparse.Namespace) -> int:
     if available:
         print(f"\n{Colors.GREEN}{Colors.BOLD}✓ New version available!{Colors.RESET}")
         print(f"\n{Colors.WHITE}To upgrade, run:{Colors.RESET}")
-        print(f"  {Colors.CYAN}pip install --upgrade cachekaro{Colors.RESET}\n")
+        print(f"  {Colors.CYAN}pip install --no-cache-dir --upgrade cachekaro{Colors.RESET}\n")
     else:
         print(f"\n{Colors.GREEN}{Colors.BOLD}✓ You're on the latest version!{Colors.RESET}\n")
 

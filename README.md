@@ -69,6 +69,14 @@ source venv/bin/activate        # macOS/Linux
 pip install -e .
 ```
 
+### • Upgrade CacheKaro
+
+```bash
+pip install --no-cache-dir --upgrade cachekaro
+```
+
+> **Tip:** Use `--no-cache-dir` to ensure you get the latest version from PyPI, bypassing any local pip cache.
+
 ### • Verify Installation
 
 ```bash
