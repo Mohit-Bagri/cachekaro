@@ -22,7 +22,7 @@ def _d(x: str) -> str:
 
 _attr = {
     "n": "TU9ISVQgQkFHUkk=",  # Name
-    "u": "aHR0cHM6Ly9naXRodWIuY29tL01vaGl0LUJhZ3Jp",  # Profile URL
+    "u": "aHR0cHM6Ly9tb2hpdGJhZ3JpLXBvcnRmb2xpby52ZXJjZWwuYXBw",  # Portfolio URL
     "r": "aHR0cHM6Ly9naXRodWIuY29tL01vaGl0LUJhZ3JpL2NhY2hla2Fybw==",  # Repo URL
     "c": "SW5kaWE=",  # Country
 }

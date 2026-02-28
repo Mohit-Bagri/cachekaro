@@ -587,7 +587,7 @@ More Examples:
   cachekaro clean --auto             # Clean all without prompts
   cachekaro report --format csv      # Generate CSV report
 
-For more info: https://github.com/Mohit-Bagri/cachekaro
+For more info: https://mohitbagri-portfolio.vercel.app
         """,
     )
 
@@ -801,7 +801,7 @@ Debug information:
 {traceback.format_exc()}
 
 Please report this issue at:
-https://github.com/Mohit-Bagri/cachekaro/issues
+https://mohitbagri-portfolio.vercel.app
 
 Press Enter to exit...
 """

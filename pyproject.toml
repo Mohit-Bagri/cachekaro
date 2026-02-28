@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cachekaro"
-version = "2.3.1"
+version = "2.3.2"
 description = "Cross-platform storage and cache analyzer & cleaner - Cache Karo!"
 readme = "README.md"
 license = "MIT"
@@ -62,7 +62,7 @@ rich = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Mohit-Bagri/cachekaro"
+Homepage = "https://mohitbagri-portfolio.vercel.app"
 Documentation = "https://github.com/Mohit-Bagri/cachekaro#readme"
 Repository = "https://github.com/Mohit-Bagri/cachekaro.git"
 Issues = "https://github.com/Mohit-Bagri/cachekaro/issues"
@@ -111,7 +111,7 @@ disallow_incomplete_defs = true
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
-addopts = "-v --cov=cachekaro --cov-report=term-missing"
+addopts = "-v"
 
 [tool.coverage.run]
 source = ["cachekaro"]
