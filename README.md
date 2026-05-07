@@ -356,7 +356,7 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-Made in 🇮🇳 with ❤️ by [MOHIT BAGRI](https://mohitbagri-portfolio.vercel.app)
+Made in 🇮🇳 with ❤️ by [MOHIT BAGRI](https://github.com/Mohit-Bagri)
 
 **CacheKaro** - *Clean It Up!*
 
